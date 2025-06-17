@@ -52,7 +52,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // --- Initial Dummy Data (Doctor's Notes - NOT YET FIRESTORE ENABLED) ---
     // This will remain local until you decide to migrate Doctor's Notes to Firestore as well.
-    let doctorNotesData = [
+    /*let doctorNotesData = [
         {
             id: 101,
             title: 'Understanding Common Cold Symptoms',
@@ -82,7 +82,7 @@ document.addEventListener('DOMContentLoaded', function() {
             content: 'Seasonal allergies can cause sneezing, itchy eyes, runny nose, and congestion. They are triggered by pollen from trees, grasses, and weeds. Antihistamines, nasal sprays, and avoiding allergens can help manage symptoms. Consult a doctor for severe cases.'
         }
     ];
-    let nextDoctorNoteId = doctorNotesData.length > 0 ? Math.max(...doctorNotesData.map(n => n.id)) + 1 : 201;
+    let nextDoctorNoteId = doctorNotesData.length > 0 ? Math.max(...doctorNotesData.map(n => n.id)) + 1 : 201;*/
 
 
     // --- 3. AUTHENTICATION AND INITIAL DISPLAY ---
@@ -244,83 +244,146 @@ document.addEventListener('DOMContentLoaded', function() {
     // --- 9. DOCTOR'S NOTE FUNCTIONS (STILL USES LOCAL DATA) ---
 
     // Function to render the doctor's notes table from the doctorNotesData array
-    function renderNotesTable(notesToRender = doctorNotesData) {
-        if (!notesTableBody) {
-            console.error("notesTableBody not found for rendering notes.");
+    // --- DOCTOR'S NOTE MANAGEMENT (NOW FULLY FIRESTORE ENABLED) ---
+
+// Helper function for form validation feedback (ensures consistency)
+function setValidationFeedback(input, isValid, message) {
+    const feedback = input.parentNode.querySelector('.invalid-feedback');
+    if (feedback) {
+        feedback.remove();
+    }
+    input.classList.remove('is-invalid', 'is-valid');
+    if (!isValid) {
+        input.classList.add('is-invalid');
+        const newFeedback = document.createElement('div');
+        newFeedback.className = 'invalid-feedback';
+        newFeedback.textContent = message;
+        input.parentNode.appendChild(newFeedback);
+    } else {
+        input.classList.add('is-valid');
+    }
+}
+
+// Helper function to validate entire form
+function validateForm(form) {
+    clearFormValidation(form);
+    let isValid = true;
+    const requiredInputs = form.querySelectorAll('[required]');
+
+    requiredInputs.forEach(input => {
+        if (!input.value.trim()) {
+            isValid = false;
+            setValidationFeedback(input, false, 'This field is required.');
+        } else {
+            setValidationFeedback(input, true);
+        }
+    });
+    return isValid;
+}
+
+
+// Function to render doctor notes table from Firestore data
+function renderDoctorNotesTable() {
+    const tableBody = noteListTable ? noteListTable.querySelector('tbody') : null;
+
+    if (!tableBody) {
+        console.error("Doctor note table body not found for rendering.");
+        return;
+    }
+
+    // Initial loading message
+    tableBody.innerHTML = '<tr><td colspan="4" class="text-center py-4">Loading notes...</td></tr>';
+
+    // Setup the real-time listener for doctorNotes collection
+    db.collection("doctorNotes").orderBy("createdAt", "desc").onSnapshot(snapshot => {
+        console.log("Firestore onSnapshot: Doctor notes data changed!"); // Debug log
+        tableBody.innerHTML = ''; // Clear existing rows
+
+        if (snapshot.empty) {
+            tableBody.innerHTML = '<tr><td colspan="4" class="text-center py-4">No doctor notes found.</td></tr>';
             return;
         }
-        let tableRowsHtml = '';
-        if (notesToRender.length === 0) {
-            tableRowsHtml = '<tr><td colspan="5" class="text-center py-4">No doctor\'s notes found.</td></tr>';
-        } else {
-            notesToRender.forEach(note => {
-                tableRowsHtml += `
-                    <tr>
-                        <td>${note.title}</td>
-                        <td>${note.date}</td>
-                        <td>
-                            <div class="form-check form-switch">
-                                <input class="form-check-input note-status-toggle" type="checkbox" role="switch"
-                                       id="noteStatus${note.id}" ${note.status ? 'checked' : ''} data-note-id="${note.id}">
-                                <label class="form-check-label" for="noteStatus${note.id}">${note.status ? 'Published' : 'Draft'}</label>
-                            </div>
-                        </td>
-                        <td>
-                            <button class="btn btn-sm btn-info view-note-btn" data-note-id="${note.id}"><i class="fas fa-eye"></i></button>
-                            <button class="btn btn-sm btn-warning edit-note-btn" data-note-id="${note.id}"><i class="fas fa-edit"></i></button>
-                            <button class="btn btn-sm btn-danger delete-note-btn" data-note-id="${note.id}"><i class="fas fa-trash"></i></button>
-                        </td>
-                    </tr>
-                `;
-            });
-        }
-        // Assuming notesTableBody is the <tbody> element within the table
-        notesTableBody.innerHTML = tableRowsHtml;
 
-        // Attach event listeners for dynamically created note buttons
-        setupNoteActionButtons();
-    }
-
-    // Helper to attach event listeners for note action buttons
-    function setupNoteActionButtons() {
-        const viewButtons = document.querySelectorAll('.view-note-btn');
-        viewButtons.forEach(button => {
-            button.removeEventListener('click', handleViewNote);
-            button.addEventListener('click', handleViewNote);
+        snapshot.forEach(doc => {
+            const note = doc.data();
+            const row = tableBody.insertRow();
+            row.setAttribute('data-id', doc.id); // Store Firestore document ID
+            row.innerHTML = `
+                <td>${note.title}</td>
+                <td>${note.date ? new Date(note.date).toLocaleDateString() : 'N/A'}</td>
+                <td>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input note-status-toggle" type="checkbox" role="switch"
+                               id="noteStatus${doc.id}" ${note.status ? 'checked' : ''} data-note-id="${doc.id}">
+                        <label class="form-check-label" for="noteStatus${doc.id}">${note.status ? 'Published' : 'Draft'}</label>
+                    </div>
+                </td>
+                <td>
+                    <button class="btn btn-sm btn-info view-note-btn" data-note-id="${doc.id}"><i class="fas fa-eye"></i></button>
+                    <button class="btn btn-sm btn-warning edit-note-btn" data-note-id="${doc.id}"><i class="fas fa-edit"></i></button>
+                    <button class="btn btn-sm btn-danger delete-note-btn" data-note-id="${doc.id}"><i class="fas fa-trash"></i></button>
+                </td>
+            `;
         });
 
-        const editButtons = document.querySelectorAll('.edit-note-btn');
-        editButtons.forEach(button => {
-            button.removeEventListener('click', handleEditNote);
-            button.addEventListener('click', handleEditNote);
-        });
+        // Re-attach event listeners for action buttons after rendering
+        attachDoctorNoteActionListeners();
 
-        const deleteButtons = document.querySelectorAll('.delete-note-btn');
-        deleteButtons.forEach(button => {
-            button.removeEventListener('click', handleDeleteNote);
-            button.addEventListener('click', handleDeleteNote);
-        });
+    }, error => {
+        console.error("Error fetching doctor notes: ", error);
+        tableBody.innerHTML = '<tr><td colspan="4" class="text-center text-danger py-4">Error loading notes.</td></tr>';
+        showToast('Error loading doctor notes.', 'danger');
+    });
+}
 
-        const statusToggles = document.querySelectorAll('.note-status-toggle');
-        statusToggles.forEach(toggle => {
-            toggle.removeEventListener('change', handleNoteStatusToggle);
-            toggle.addEventListener('change', handleNoteStatusToggle);
-        });
-    }
+// Function to attach event listeners for dynamically created note buttons (Firestore-aware)
+function attachDoctorNoteActionListeners() {
+    document.querySelectorAll('.view-note-btn').forEach(button => {
+        button.removeEventListener('click', handleViewNoteFirestore); // Prevent duplicate listeners
+        button.addEventListener('click', handleViewNoteFirestore);
+    });
 
-    // Handlers for Doctor's Notes (local data)
-    function handleViewNote(event) {
-        const noteId = parseInt(event.target.dataset.noteId);
-        const note = doctorNotesData.find(n => n.id === noteId);
-        if (note) {
+    document.querySelectorAll('.edit-note-btn').forEach(button => {
+        button.removeEventListener('click', handleEditNoteFirestore);
+        button.addEventListener('click', handleEditNoteFirestore);
+    });
+
+    document.querySelectorAll('.delete-note-btn').forEach(button => {
+        button.removeEventListener('click', handleDeleteNoteFirestore);
+        button.addEventListener('click', handleDeleteNoteFirestore);
+    });
+
+    document.querySelectorAll('.note-status-toggle').forEach(toggle => {
+        toggle.removeEventListener('change', handleNoteStatusToggleFirestore);
+        toggle.addEventListener('change', handleNoteStatusToggleFirestore);
+    });
+}
+
+// Handlers for Doctor's Notes (now using Firestore)
+async function handleViewNoteFirestore(event) {
+    const noteId = event.currentTarget.dataset.noteId;
+    try {
+        const doc = await db.collection("doctorNotes").doc(noteId).get();
+        if (doc.exists) {
+            const note = doc.data();
             alert(`Title: ${note.title}\nDate: ${note.date}\nStatus: ${note.status ? 'Published' : 'Draft'}\nContent: ${note.content}`);
+        } else {
+            showToast('Note not found.', 'danger');
         }
+    } catch (error) {
+        console.error("Error viewing note:", error);
+        showToast('Error viewing note.', 'danger');
     }
+}
 
-    function handleEditNote(event) {
-        currentEditingDoctorNoteId = parseInt(event.target.dataset.noteId);
-        const note = doctorNotesData.find(n => n.id === currentEditingDoctorNoteId);
-        if (note) {
+async function handleEditNoteFirestore(event) {
+    const noteId = event.currentTarget.dataset.noteId;
+    currentEditingDoctorNoteId = noteId; // Store Firestore document ID
+
+    try {
+        const doc = await db.collection("doctorNotes").doc(noteId).get();
+        if (doc.exists) {
+            const note = doc.data();
             if (noteFormTitle) noteFormTitle.textContent = 'Edit Doctor\'s Note';
             if (noteTitleInput) noteTitleInput.value = note.title;
             if (noteDateInput) noteDateInput.value = note.date;
@@ -328,137 +391,151 @@ document.addEventListener('DOMContentLoaded', function() {
             if (noteFormStatusInput) noteFormStatusInput.checked = note.status;
 
             if (noteFormContainer) noteFormContainer.style.display = 'block';
-            if (notesListTable) notesListTable.style.display = 'none';
+            if (noteListTable) noteListTable.style.display = 'none'; // Hide the table div
             clearFormValidation(noteForm);
+        } else {
+            showToast('Note not found for editing.', 'danger');
+        }
+    } catch (error) {
+        console.error("Error loading note for editing:", error);
+        showToast('Error loading note for editing.', 'danger');
+    }
+}
+
+async function handleDeleteNoteFirestore(event) {
+    const noteId = event.currentTarget.dataset.noteId;
+    if (confirm('Are you sure you want to delete this doctor\'s note?')) {
+        showLoading(event.currentTarget, '<i class="fas fa-trash"></i> Deleting...');
+        try {
+            await db.collection("doctorNotes").doc(noteId).delete();
+            showToast('Doctor note deleted successfully!', 'success');
+            console.log("Doctor note successfully deleted!");
+        } catch (error) {
+            showToast('Error deleting doctor note.', 'danger');
+            console.error("Error removing document: ", error);
+        } finally {
+            hideLoading(event.currentTarget, '<i class="fas fa-trash"></i> Delete');
         }
     }
+}
 
-    function handleDeleteNote(event) {
-        const noteId = parseInt(event.target.dataset.noteId);
-        if (confirm('Are you sure you want to delete this doctor\'s note?')) {
-            doctorNotesData = doctorNotesData.filter(note => note.id !== noteId);
-            renderNotesTable();
-            showToast('Note deleted successfully!', 'success');
-        }
+async function handleNoteStatusToggleFirestore(event) {
+    const noteId = event.currentTarget.dataset.noteId;
+    const newStatus = event.currentTarget.checked;
+    try {
+        await db.collection("doctorNotes").doc(noteId).update({
+            status: newStatus,
+            lastUpdated: firebase.firestore.FieldValue.serverTimestamp() // Always update lastUpdated
+        });
+        showToast(`Note status updated to ${newStatus ? 'Published' : 'Draft'}.`, 'info');
+    } catch (error) {
+        console.error("Error updating note status:", error);
+        showToast('Error updating note status.', 'danger');
+    }
+}
+
+// Listener setup for Doctor's Notes section (called after HTML injection)
+// This is the main function that gets called when the 'Doctor Note' section is displayed.
+function setupDoctorNoteListeners() {
+    // Get references to DOM elements *after* the HTML for the section is injected
+    // These should correspond to the IDs in your HTML for the doctorNote section
+    addNoteBtn = document.getElementById('addNoteBtn');
+    noteFormContainer = document.getElementById('noteFormContainer');
+    noteForm = document.getElementById('noteForm');
+    noteTitleInput = document.getElementById('noteTitle');
+    noteDateInput = document.getElementById('noteDate');
+    noteContentInput = document.getElementById('noteContent');
+    noteFormStatusInput = document.getElementById('noteFormStatus');
+    saveNoteBtn = document.getElementById('saveNoteBtn');
+    cancelNoteFormBtn = document.getElementById('cancelNoteFormBtn');
+    noteListTable = document.getElementById('noteListTable'); // This is the div holding the table
+    noteFormTitle = document.getElementById('noteFormTitle');
+
+
+    // Add New Note Button handler
+    if (addNoteBtn) {
+        addNoteBtn.addEventListener('click', () => {
+            if (noteFormContainer) noteFormContainer.style.display = 'block';
+            if (noteListTable) noteListTable.style.display = 'none'; // Hide the table div
+            if (noteForm) noteForm.reset(); // Clear form fields
+            if (noteFormTitle) noteFormTitle.textContent = 'Add New Doctor\'s Note';
+            currentEditingDoctorNoteId = null; // Reset for new note
+            clearFormValidation(noteForm);
+        });
     }
 
-    function handleNoteStatusToggle(event) {
-        const noteId = parseInt(event.target.dataset.noteId);
-        const note = doctorNotesData.find(n => n.id === noteId);
-        if (note) {
-            note.status = event.target.checked;
-            showToast(`Note "${note.title}" status changed to ${note.status ? 'Published' : 'Draft'}.`, 'info');
-            // Re-render to update the label if needed, or just change the label text directly
-            event.target.nextElementSibling.textContent = note.status ? 'Published' : 'Draft';
-        }
+    // Cancel Note Form Button handler
+    if (cancelNoteFormBtn) {
+        cancelNoteFormBtn.addEventListener('click', () => {
+            if (noteFormContainer) noteFormContainer.style.display = 'none';
+            if (noteListTable) noteListTable.style.display = 'block'; // Show the table div
+            if (noteForm) noteForm.reset();
+            clearFormValidation(noteForm);
+            currentEditingDoctorNoteId = null; // Reset
+        });
     }
 
-    // Listener setup for Doctor's Notes section (called after HTML injection)
-    function setupDoctorNoteListeners() {
-        addNoteBtn = document.getElementById('addNoteBtn');
-        noteFormContainer = document.getElementById('noteFormContainer');
-        noteForm = document.getElementById('noteForm');
-        noteTitleInput = document.getElementById('noteTitle');
-        noteDateInput = document.getElementById('noteDate');
-        noteContentInput = document.getElementById('noteContent');
-        noteFormStatusInput = document.getElementById('noteFormStatus');
-        saveNoteBtn = document.getElementById('saveNoteBtn');
-        cancelNoteFormBtn = document.getElementById('cancelNoteFormBtn');
-        notesTableBody = document.querySelector('#noteListTable tbody'); // Ensure this points to the tbody
-        noteFormTitle = document.getElementById('noteFormTitle');
-        const notesListTable = document.getElementById('noteListTable'); // Get the parent div for table
+    // Note Form Submission (updated to use Firestore)
+    if (noteForm) {
+        noteForm.addEventListener('submit', async (event) => { // Made async for Firestore operations
+            event.preventDefault();
+            clearFormValidation(noteForm);
 
-        // Add New Note Button
-        if (addNoteBtn) {
-            addNoteBtn.addEventListener('click', () => {
-                if (noteFormContainer) noteFormContainer.style.display = 'block';
-                if (notesListTable) notesListTable.style.display = 'none'; // Hide the table when form is shown
-                if (noteForm) noteForm.reset(); // Clear form fields
-                if (noteFormTitle) noteFormTitle.textContent = 'Add New Doctor\'s Note';
-                currentEditingDoctorNoteId = null;
+            if (!validateForm(noteForm)) {
+                showToast('Please correct the highlighted fields.', 'warning');
+                return;
+            }
+
+            showLoading(saveNoteBtn, 'Saving...');
+
+            const noteData = {
+                title: noteTitleInput.value.trim(),
+                date: noteDateInput.value.trim(),
+                content: noteContentInput.value.trim(),
+                status: noteFormStatusInput.checked,
+                lastUpdated: firebase.firestore.FieldValue.serverTimestamp() // Always update lastUpdated
+            };
+
+            try {
+                if (currentEditingDoctorNoteId) {
+                    // Update existing note in Firestore
+                    await db.collection("doctorNotes").doc(currentEditingDoctorNoteId).update(noteData);
+                    showToast('Doctor note updated successfully!', 'success');
+                    console.log("Doctor note successfully updated!");
+                } else {
+                    // Add new note to Firestore
+                    const newNoteData = {
+                        ...noteData,
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp() // Add createdAt for new notes
+                    };
+                    const docRef = await db.collection("doctorNotes").add(newNoteData);
+                    showToast('Doctor note added successfully!', 'success');
+                    console.log("Doctor note written with ID: ", docRef.id);
+                }
+            } catch (error) {
+                showToast('Error saving doctor note.', 'danger');
+                console.error("Error saving doctor note: ", error);
+            } finally {
+                hideLoading(saveNoteBtn, 'Save Note');
+                noteForm.reset();
                 clearFormValidation(noteForm);
-            });
-        }
-
-        // Cancel Note Form Button
-        if (cancelNoteFormBtn) {
-            cancelNoteFormBtn.addEventListener('click', () => {
                 if (noteFormContainer) noteFormContainer.style.display = 'none';
-                if (notesListTable) notesListTable.style.display = 'block'; // Show the table again
-                if (noteForm) noteForm.reset();
-                clearFormValidation(noteForm);
-            });
-        }
-
-        // Note Form Submission
-        if (noteForm) {
-            noteForm.addEventListener('submit', function(event) {
-                event.preventDefault();
-                clearFormValidation(noteForm);
-
-                let isValid = true;
-                if (!noteTitleInput.value.trim()) {
-                    setValidationFeedback(noteTitleInput, false, 'Note title is required.');
-                    isValid = false;
-                }
-                if (!noteDateInput.value.trim()) {
-                    setValidationFeedback(noteDateInput, false, 'Date is required.');
-                    isValid = false;
-                }
-                if (!noteContentInput.value.trim()) {
-                    setValidationFeedback(noteContentInput, false, 'Content is required.');
-                    isValid = false;
-                }
-
-                if (!isValid) {
-                    showToast('Please correct the highlighted fields.', 'warning');
-                    return;
-                }
-
-                const newNote = {
-                    title: noteTitleInput.value.trim(),
-                    date: noteDateInput.value.trim(),
-                    content: noteContentInput.value.trim(),
-                    status: noteFormStatusInput.checked // true for Published, false for Draft
-                };
-
-                showLoading(saveNoteBtn, 'Saving...');
-
-                setTimeout(() => { // Simulate async save for local data
-                    if (currentEditingDoctorNoteId) {
-                        // Update existing note
-                        const index = doctorNotesData.findIndex(n => n.id === currentEditingDoctorNoteId);
-                        if (index !== -1) {
-                            doctorNotesData[index] = { ...doctorNotesData[index], ...newNote };
-                            showToast('Note updated successfully!', 'success');
-                        } else {
-                            showToast('Error: Note not found for update.', 'danger');
-                        }
-                    } else {
-                        // Add new note
-                        newNote.id = nextDoctorNoteId++;
-                        doctorNotesData.push(newNote);
-                        showToast('Note added successfully!', 'success');
-                    }
-
-                    hideLoading(saveNoteBtn);
-                    renderNotesTable(); // Re-render table
-                    noteForm.reset();
-                    clearFormValidation(noteForm);
-                    if (noteFormContainer) noteFormContainer.style.display = 'none';
-                    if (notesListTable) notesListTable.style.display = 'block';
-                }, 500); // Simulate network delay
-            });
-        }
-
-        renderNotesTable(); // Initial render of notes table after listeners are set up
+                if (noteListTable) noteListTable.style.display = 'block';
+                if (noteFormTitle) noteFormTitle.textContent = 'Add New Doctor\'s Note';
+                currentEditingDoctorNoteId = null; // Reset
+            }
+        });
     }
 
+    // IMPORTANT: Initial render of notes table from Firestore when section loads
+    renderDoctorNotesTable();
+}
 
     // --- 10. ARTICLE FUNCTIONS (FIRESTORE ENABLED) ---
 
     // Function to render Articles Table (listens to Firestore in real-time)
     function renderArticlesTable() {
+        console.log("renderArticlesTable called!");
         // Ensure articlesTableBody is available (it will be queried by setupArticleListeners)
         if (!articlesTableBody) {
             console.error("articlesTableBody not found for rendering articles. Make sure setupArticleListeners has run.");
@@ -747,15 +824,15 @@ document.addEventListener('DOMContentLoaded', function() {
                             <h3 class="card-title text-primary">All Articles</h3>
                             <ul class="list-unstyled article-list-dashboard" id="latestArticlesDashboardList">
                                 <li class="d-flex align-items-center py-2 border-bottom">
-                                    <img src="https://via.placeholder.com/60" alt="Article Thumbnail" class="rounded me-3">
+                                    <img src="" alt="Article Thumbnail" class="rounded me-3">
                                     <span>Stress Management Techniques</span>
                                 </li>
                                 <li class="d-flex align-items-center py-2 border-bottom">
-                                    <img src="https://via.placeholder.com/60" alt="Article Thumbnail" class="rounded me-3">
+                                    <img src="" alt="Article Thumbnail" class="rounded me-3">
                                     <span>Healthy eating habits</span>
                                 </li>
                                 <li class="d-flex align-items-center py-2">
-                                    <img src="https://via.placeholder.com/60" alt="Article Thumbnail" class="rounded me-3">
+                                    <img src="" alt="Article Thumbnail" class="rounded me-3">
                                     <span>Workplace safety measures</span>
                                 </li>
                             </ul>
@@ -861,7 +938,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             </div>
                             <div class="mb-3">
                                 <label for="articleImageURL" class="form-label">Image URL</label>
-                                <input type="url" class="form-control" id="articleImageURL" placeholder="e.g., https://example.com/image.jpg">
+                                <input type="url" class="form-control" id="articleImageURL" placeholder="">
                             </div>
                             <div class="mb-3">
                                 <label for="articleContent" class="form-label">Content</label>
@@ -879,7 +956,7 @@ document.addEventListener('DOMContentLoaded', function() {
             `;
         } else if (sectionId === 'settings') {
             sectionHtml = `
-                <div class="settings-section">
+                <div class="settings-section dashboard-section">
                     <h2 class="section-title">Settings</h2>
                     <div class="settings-tabs">
                         <ul class="nav nav-tabs" id="settingsTab" role="tablist">
@@ -896,47 +973,57 @@ document.addEventListener('DOMContentLoaded', function() {
                         <div class="tab-content" id="settingsTabContent">
                             <div class="tab-pane fade show active" id="profile" role="tabpanel" aria-labelledby="profile-tab">
                                 <h4>Edit Profile</h4>
-                                <form>
+
+                        
+                                <form id="adminProfileForm">
                                     <div class="mb-3">
                                         <label for="adminName" class="form-label">Name</label>
-                                        <input type="text" class="form-control" id="adminName" value="Dr. XYZ">
+                                        <input type="text" class="form-control" id="adminName" required>
+                                        <div class="invalid-feedback"></div>
                                     </div>
                                     <div class="mb-3">
                                         <label for="adminEmail" class="form-label">Email</label>
-                                        <input type="email" class="form-control" id="adminEmail" value="admin@example.com" readonly>
+                                        <input type="email" class="form-control" id="adminEmail" readonly>
                                     </div>
-                                    <button type="submit" class="btn btn-success">Save Profile</button>
+                                    <button type="submit" class="btn btn-success" id="saveProfileDetailsBtn"><i class="fas fa-save"></i> Save Details</button>
                                 </form>
                             </div>
+
                             <div class="tab-pane fade" id="security" role="tabpanel" aria-labelledby="security-tab">
-                                <h4>Change Password</h4>
-                                <form>
+                                <h4>Security Settings</h4>
+                                <p>Manage your password and two-factor authentication here.</p>
+                                <form id="changePasswordForm">
                                     <div class="mb-3">
                                         <label for="currentPassword" class="form-label">Current Password</label>
-                                        <input type="password" class="form-control" id="currentPassword">
+                                        <input type="password" class="form-control" id="currentPassword" required>
+                                        <div class="invalid-feedback"></div>
                                     </div>
                                     <div class="mb-3">
                                         <label for="newPassword" class="form-label">New Password</label>
-                                        <input type="password" class="form-control" id="newPassword">
+                                        <input type="password" class="form-control" id="newPassword" required pattern=".{6,}" title="Password must be at least 6 characters long">
+                                        <div class="invalid-feedback"></div>
                                     </div>
                                     <div class="mb-3">
                                         <label for="confirmNewPassword" class="form-label">Confirm New Password</label>
-                                        <input type="password" class="form-control" id="confirmNewPassword">
+                                        <input type="password" class="form-control" id="confirmNewPassword" required>
+                                        <div class="invalid-feedback"></div>
                                     </div>
-                                    <button type="submit" class="btn btn-success">Change Password</button>
+                                    <button type="submit" class="btn btn-warning" id="changePasswordBtn"><i class="fas fa-key"></i> Change Password</button>
                                 </form>
                             </div>
+
                             <div class="tab-pane fade" id="notifications" role="tabpanel" aria-labelledby="notifications-tab">
-                                <h4>Notification Preferences</h4>
+                                <h4>Notification Settings</h4>
+                                <p>Customize your notification preferences.</p>
                                 <div class="form-check form-switch mb-3">
-                                    <input class="form-check-input" type="checkbox" role="switch" id="emailNotifications" checked>
-                                    <label class="form-check-label" for="emailNotifications">Enable Email Notifications</label>
+                                    <input class="form-check-input" type="checkbox" id="emailNotifications" checked>
+                                    <label class="form-check-label" for="emailNotifications">Email Notifications</label>
                                 </div>
                                 <div class="form-check form-switch mb-3">
-                                    <input class="form-check-input" type="checkbox" role="switch" id="smsNotifications">
-                                    <label class="form-check-label" for="smsNotifications">Enable SMS Notifications</label>
+                                    <input class="form-check-input" type="checkbox" id="pushNotifications">
+                                    <label class="form-check-label" for="pushNotifications">Push Notifications</label>
                                 </div>
-                                <button type="submit" class="btn btn-success">Save Preferences</button>
+                                <button class="btn btn-primary">Save Notification Settings</button>
                             </div>
                         </div>
                     </div>
@@ -987,6 +1074,201 @@ document.addEventListener('DOMContentLoaded', function() {
         }[sectionId];
         activateNavLink(navLinkToActivate);
     }
+
+    // Function to load and display user profile data
+async function loadAdminProfile() {
+    const user = firebase.auth().currentUser;
+    if (user && db && adminNameInput && adminEmailInput) {
+        // Set email (from Auth) immediately
+        adminEmailInput.value = user.email || '';
+
+        // Try to get name and photo from Firestore (which is more persistent)
+        try {
+            const userDoc = await db.collection("users").doc(user.uid).get();
+            if (userDoc.exists) {
+                const userData = userDoc.data();
+                adminNameInput.value = userData.name || user.displayName || '';
+                
+            } else {
+                // If no Firestore document, use Auth displayName
+                adminNameInput.value = user.displayName || '';
+               
+            }
+        } catch (error) {
+            console.error("Error loading user profile from Firestore:", error);
+            // Fallback to Auth display name and photoURL if Firestore fails
+            adminNameInput.value = user.displayName || '';
+           
+            showToast('Could not load complete profile data.', 'warning');
+        }
+    } else {
+        // Handle case where user is not logged in or elements aren't ready
+        console.warn("User not logged in or profile elements not found for loading.");
+        if (adminNameInput) adminNameInput.value = '';
+        if (adminEmailInput) adminEmailInput.value = '';
+        
+    }
+}
+
+// Handler for saving profile details (name)
+async function handleSaveProfileDetails(event) {
+    event.preventDefault();
+    clearFormValidation(adminProfileForm);
+
+    if (!validateForm(adminProfileForm)) {
+        showToast('Please correct the highlighted fields.', 'warning');
+        return;
+    }
+
+    const user = firebase.auth().currentUser;
+    if (!user) {
+        showToast('You must be logged in to update your profile.', 'danger');
+        return;
+    }
+
+    showLoading(saveProfileDetailsBtn, 'Saving...');
+    const newName = adminNameInput.value.trim();
+
+    try {
+        // 1. Update display name in Firebase Authentication
+        await user.updateProfile({
+            displayName: newName
+        });
+        console.log("Firebase Auth display name updated.");
+
+        // 2. Update name in Firestore user document
+        await db.collection("users").doc(user.uid).set({
+            name: newName,
+            lastUpdated: firebase.firestore.FieldValue.serverTimestamp()
+        }, { merge: true }); // Use merge: true to avoid overwriting other fields like 'role'
+        console.log("Firestore user name updated.");
+
+        showToast('Profile details updated successfully!', 'success');
+    } catch (error) {
+        console.error("Error updating profile details:", error);
+        showToast(`Failed to update profile details: ${error.message}`, 'danger');
+    } finally {
+        hideLoading(saveProfileDetailsBtn, '<i class="fas fa-save"></i> Save Details');
+    }
+}
+// Handler for changing password
+async function handleChangePassword(event) {
+    console.log("Password change form submitted!");
+    event.preventDefault();
+    clearFormValidation(changePasswordForm);
+
+    const currentPassword = currentPasswordInput.value;
+    const newPassword = newPasswordInput.value;
+    const confirmNewPassword = confirmNewPasswordInput.value;
+
+    let isValid = true;
+
+    if (!currentPassword.trim()) {
+        setValidationFeedback(currentPasswordInput, false, 'Current password is required.');
+        isValid = false;
+    }
+    if (!newPassword.trim() || newPassword.length < 6) {
+        setValidationFeedback(newPasswordInput, false, 'New password must be at least 6 characters.');
+        isValid = false;
+    }
+    if (newPassword !== confirmNewPassword) {
+        setValidationFeedback(confirmNewPasswordInput, false, 'New passwords do not match.');
+        isValid = false;
+    }
+    if (newPassword === currentPassword) {
+        setValidationFeedback(newPasswordInput, false, 'New password cannot be the same as current password.');
+        isValid = false;
+    }
+
+    if (!isValid) {
+        showToast('Please correct the highlighted fields.', 'warning');
+        return;
+    }
+
+    const user = firebase.auth().currentUser;
+    if (!user) {
+        showToast('You must be logged in to change your password.', 'danger');
+        return;
+    }
+
+    showLoading(changePasswordBtn, 'Changing...');
+
+    try {
+        // Re-authenticate user before changing sensitive data like password or email
+        const credential = firebase.auth.EmailAuthProvider.credential(user.email, currentPassword);
+        await user.reauthenticateWithCredential(credential);
+        console.log("User re-authenticated successfully.");
+
+        await user.updatePassword(newPassword);
+        showToast('Password changed successfully!', 'success');
+        changePasswordForm.reset(); // Clear the form
+        clearFormValidation(changePasswordForm);
+    } catch (error) {
+        console.error("Error changing password:", error);
+        let errorMessage = 'Failed to change password.';
+        if (error.code === 'auth/wrong-password') {
+            errorMessage = 'Incorrect current password.';
+            setValidationFeedback(currentPasswordInput, false, errorMessage);
+        } else if (error.code === 'auth/weak-password') {
+            errorMessage = 'New password is too weak. Please use a stronger one.';
+            setValidationFeedback(newPasswordInput, false, errorMessage);
+        } else if (error.code === 'auth/requires-recent-login') {
+            errorMessage = 'Please log out and log back in to change your password.';
+        }
+        showToast(errorMessage, 'danger');
+    } finally {
+        hideLoading(changePasswordBtn, '<i class="fas fa-key"></i> Change Password');
+    }
+}
+
+
+// Listener setup for the Settings section
+function setupSettingsListeners() {
+    // Get references to DOM elements after HTML injection
+    profilePictureDisplay = document.getElementById('profilePictureDisplay');
+    profilePictureInput = document.getElementById('profilePictureInput');
+    saveProfilePictureBtn = document.getElementById('saveProfilePictureBtn');
+    adminProfileForm = document.getElementById('adminProfileForm');
+    adminNameInput = document.getElementById('adminName');
+    adminEmailInput = document.getElementById('adminEmail');
+    saveProfileDetailsBtn = document.getElementById('saveProfileDetailsBtn');
+    changePasswordForm = document.getElementById('changePasswordForm');
+    currentPasswordInput = document.getElementById('currentPassword');
+    newPasswordInput = document.getElementById('newPassword');
+    confirmNewPasswordInput = document.getElementById('confirmNewPassword');
+    changePasswordBtn = document.getElementById('changePasswordBtn');
+
+
+    // Load current profile data when the settings section is displayed
+    loadAdminProfile();
+
+    // Event Listeners for forms/buttons
+    if (adminProfileForm) {
+        adminProfileForm.addEventListener('submit', handleSaveProfileDetails);
+    }
+    if (saveProfilePictureBtn) {
+        saveProfilePictureBtn.addEventListener('click', handleSaveProfilePicture);
+    }
+    if (changePasswordForm) {
+        changePasswordForm.addEventListener('submit', handleChangePassword);
+    }
+
+    // Optional: Preview profile picture before upload
+    if (profilePictureInput) {
+        profilePictureInput.addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    if (profilePictureDisplay) {
+                        profilePictureDisplay.src = e.target.result;
+                    }
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    }
+}
 
     // --- 12. INITIAL EVENT LISTENERS (for sidebar navigation) ---
     if (dashboardLink) {
