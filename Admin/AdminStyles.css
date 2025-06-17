@@ -1,0 +1,419 @@
+:root {
+    --primary-blue: #2A448C; 
+    --yellow-lime: #D6DE00;
+    --text-color-dark: #333;
+    --text-color-light: #fff;
+    --text-color-gray: #918f8f;
+    --card-shadow: rgba(0, 0, 0, 0.1);
+}
+
+/* ADMIN LOGIN */
+
+.adminbody {
+    background: linear-gradient(to right, #2A448C, #D6DE00); /* Background gradient as seen in other pages */
+    font-family: 'Poppins', sans-serif;
+    color: #fff; /* White text for main body */
+}
+.login-header {
+    background-color: var(--primary-blue); /* Dark blue background for header */
+    padding: 20px;
+    text-align: center;
+    color: #fff;
+    position: absolute; /* Position at the very top */
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 10;
+}
+.login-header img {
+    height: 60px; /* Adjust logo size */
+    margin-bottom: 10px;
+}
+.login-header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 0;
+}
+.login-container {
+    margin-top: 150px; /* Push content down to account for header */
+    background-color: #fff; /* White card background */
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    color: #333; /* Dark text for card content */
+    width: 100%;
+    max-width: 450px; /* Max width for the card */
+    position: relative; /* For z-index if needed */
+    z-index: 5;
+}
+.login-container .form-label {
+    font-weight: bold;
+    color: #555;
+}
+.login-container .input-group-text {
+    background-color: transparent;
+    border: none;
+    color: #888;
+}
+.login-container .form-control {
+    border: none;
+    border-bottom: 1px solid #ccc; /* Underline style for inputs */
+    border-radius: 0;
+    padding-left: 0; /* Remove default padding for input if icon is used */
+}
+.login-container .form-control:focus {
+    box-shadow: none;
+    border-color: #2A448C; /* Blue underline on focus */
+}
+.login-container .btn-primary {
+    background-color: #2A448C; /* Dark blue submit button */
+    border-color: #2A448C;
+    font-size: 1.1rem;
+    padding: 10px 0;
+    font-weight: bold;
+}
+.login-container .btn-primary:hover {
+    background-color: #2A448C; /* Slightly darker blue on hover */
+    border-color: #2A448C;
+}
+
+/* ADMIN DASHBOARD */
+
+.dashboard-body {
+    margin: 0;
+    font-family: Poppins, sans-serif;
+    background-color: rgb(235, 235, 235); 
+    display: flex; 
+    min-height: 100vh;
+    overflow-x: hidden; 
+}
+
+#wrapper {
+    display: flex; /* crucial for side by side layout of sidebar and content */
+    width: 100%; 
+    min-height: 100vh;
+}
+
+#sidebar-wrapper {
+    min-height: 100vh;
+    width: var(--sidebar-width);
+    background-color: var(--primary-blue) !important;
+    position: sticky; 
+    top: 0; 
+    z-index: 1001; 
+    box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+
+}
+
+#page-content-wrapper {
+    flex-grow: 1; 
+    min-height: 100vh; 
+    background-color: var(--light-grey-bg); 
+    padding-top: var(--navbar-height);
+    
+}
+
+.sidebar-heading {
+    color: white;
+    background-color: var(--primary-blue) !important; 
+    padding-bottom: 1rem !important;
+}
+
+.sidebar-heading .admin-logo {
+    height: 35px;
+    width: auto;
+}
+
+.list-group-item {
+    border: none;
+    border-left: 5px solid transparent; 
+    padding: 12px 20px; 
+    transition: background-color 0.2s ease, border-left 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 15px; 
+    font-size: 1.1em;
+}
+
+.list-group-item:hover {
+    background-color: rgba(255, 255, 255, 0.1) !important; 
+    color: white !important;
+}
+
+
+.list-group-item.active {
+    background-color: var(--secondary-green) !important; /* Green background for active item */
+    border-left: 5px solid #fff !important; /* White border on the left */
+    padding-left: 15px !important; /* Adjust padding to account for the border width */
+    font-weight: bold;
+    color: white !important;
+}
+
+/* Logout link specific styling */
+#logoutBtn {
+    color: white !important; 
+    background-color: var(--primary-blue) !important; 
+    border-top: 1px solid rgba(255,255,255,0.1); 
+}
+#logoutBtn:hover {
+     background-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+
+.navbar {
+    height: var(--navbar-height); /* Fixed height for the top navbar */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.08) !important; 
+    z-index: 1000; /* Ensures it's above content */
+    border-bottom: none !important; 
+}
+
+/* Hide sidebar toggle button entirely since we're restricting mobile */
+#sidebarToggle {
+    display: none !important;
+}
+
+
+/* Welcome message - adjust visibility and styling */
+.navbar-text {
+    color: #555; /* Slightly muted text color */
+}
+
+/* Custom Search Bar within Navbar */
+.search-bar-custom .input-group {
+    background-color: var(--light-grey-bg); /* Light grey background for search bar */
+    border-radius: 20px; /* Rounded corners */
+    border: 1px solid #ddd; /* Subtle border */
+    overflow: hidden; /* Hide anything outside the border-radius */
+}
+.search-bar-custom .input-group-text {
+    background-color: transparent !important; 
+    border: none !important; 
+    padding-right: 0;
+}
+.search-bar-custom .form-control {
+    background-color: transparent !important;
+    border: none !important; 
+    box-shadow: none !important; 
+    padding-left: 5px;
+}
+.search-bar-custom .form-control:focus {
+    box-shadow: none !important; 
+}
+
+.user-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1px solid var(--primary-blue);
+}
+.navbar .text-primary { 
+    color: var(--primary-blue) !important; /* Your specific blue for user name */
+}
+
+/* Custom dashboard grid adjustments */
+.dashboard-grid-custom {
+    padding: 20px; /* Inner padding for the grid content */
+}
+
+.card {
+    border: none !important; /* Remove default Bootstrap card border */
+    border-radius: 8px !important; /* Rounded corners for cards */
+    box-shadow: 0 4px 8px rgba(0,0,0,0.08) !important; /* More prominent shadow for cards */
+}
+
+.card-title {
+    color: var(--primary-blue) !important; /* Blue title color */
+    font-weight: 600 !important;
+}
+
+.list-unstyled li {
+    padding: 8px 0;
+    border-bottom: 1px solid #eee; /* Light separator line */
+}
+.list-unstyled li:last-child {
+    border-bottom: none; /* No border on the last item */
+}
+
+/* Doctor's note specific checkmark icon */
+.text-success {
+    color: var(--primary-blue) !important; /* Green color for success icons */
+}
+
+/* Button Styling Overrides for 'View All' */
+.btn-primary {
+    background-color: var(--primary-blue) !important; /* Your specific blue for primary buttons */
+    border:none;
+    transition: background-color 0.2s ease;
+}
+.btn-primary:hover {
+    background-color: #D6DE00 !important; 
+    border-color: #D6DE00 !important;
+    color:#2A448C;
+}
+
+
+.article-list-dashboard img {
+    border-radius: 5px !important; /* Ensure images have slight rounded corners */
+}
+
+/* General section titles (like 'Doctor's Note Management') */
+.section-title {
+    color: var(--primary-blue);
+    font-size: 1.8em;
+    margin-bottom: 1.5rem;
+    font-weight: 600;
+}
+
+/* Adjustments for Bootstrap tables (for Doctor's Note and All Articles views) */
+.table {
+    --bs-table-bg: #fff; /* Ensure table background is white */
+    --bs-table-striped-bg: #f8f9fa; /* Light stripe color */
+    --bs-table-hover-bg: #f5f5f5; /* Light hover color */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.08); /* Subtle shadow for tables */
+    border-radius: 8px; /* Rounded corners for the table itself */
+    overflow: hidden; /* Ensures border-radius applies to corners */
+    margin-top: 20px; /* Space above table */
+}
+.table thead {
+    background-color: var(--primary-blue);
+    color: white;
+}
+.table thead th {
+    border-bottom: none; /* Remove border below header */
+    padding: 1rem;
+}
+.table tbody td {
+    vertical-align: middle; /* Vertically align cell content */
+    padding: 1rem;
+}
+.table .table-thumbnail {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 5px;
+}
+.table .form-check-input.form-switch {
+    font-size: 1.25em; /* Larger toggle switch */
+    margin-right: .5rem;
+}
+
+/* Specific styling for the Article and Doctor Note Action Buttons */
+.add-article-btn, .add-note-btn {
+    margin-bottom: 1.5rem;
+}
+
+/* Search and filter controls for All Articles */
+.article-actions {
+    display: flex;
+    justify-content: space-between; /* Pushes button and search/filter apart */
+    align-items: center;
+    flex-wrap: wrap; /* Allow wrapping on smaller screens (tablet) */
+    margin-bottom: 1.5rem;
+}
+.search-filter-controls {
+    display: flex;
+    gap: 15px;
+}
+.search-filter-controls .form-control,
+.search-filter-controls .form-select {
+    max-width: 250px; /* Limit width of search/filter inputs */
+}
+/* For tablet, if space gets tight, allow flex-wrap but maintain horizontal search/filter */
+@media (max-width: 991.98px) and (min-width: 768px) { /* Tablet size */
+    .article-actions {
+        flex-direction: row; /* Keep elements side by side */
+        justify-content: space-between;
+    }
+    .search-filter-controls {
+        flex-direction: row;
+        width: auto;
+    }
+}
+
+
+/* Article form container */
+.article-form-container {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+    margin-top: 30px;
+}
+.article-form-container h3 {
+    color: var(--primary-blue);
+    margin-bottom: 1.5rem;
+}
+.article-form-container .form-label {
+    font-weight: 500;
+}
+.article-form-container .btn {
+    margin-right: 10px;
+}
+
+/* Settings section styling */
+.settings-tabs .nav-tabs {
+    border-bottom-color: #ddd;
+    margin-bottom: 1.5rem;
+}
+.settings-tabs .nav-link {
+    color: #555;
+    border: none;
+    border-bottom: 3px solid transparent;
+    transition: all 0.2s ease;
+}
+.settings-tabs .nav-link.active {
+    color: var(--primary-blue);
+    border-bottom-color: var(--primary-blue);
+    background-color: transparent;
+    font-weight: 600;
+}
+.settings-tabs .nav-link:hover:not(.active) {
+    border-bottom-color: #aaa;
+}
+.settings-tabs .tab-pane {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+}
+.settings-tabs h4 {
+    color: var(--primary-blue);
+    margin-bottom: 1.5rem;
+}
+.settings-tabs .form-check-label {
+    font-weight: 500;
+}
+
+/* Mobile Restriction Message Styles */
+.mobile-restriction-message {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.95);
+    z-index: 9999;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+.mobile-restriction-message h2 {
+    color: var(--primary-blue);
+    font-size: 2em;
+    margin-bottom: 15px;
+}
+.mobile-restriction-message p {
+    font-size: 1.1em;
+    color: #555;
+    max-width: 400px;
+    margin: 0 auto;
+}
+.mobile-restriction-message i {
+    font-size: 3em;
+    color: var(--secondary-green);
+    margin-bottom: 20px;
+}

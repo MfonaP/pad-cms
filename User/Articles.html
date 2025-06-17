@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Articles - CMS PAD</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="icon" type="image/png" href="/Images/PAD logo.png">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="articles-body">
+
+    <div class="top-bar py-2 d-none d-md-block">
+        <div class="container d-flex justify-content-end align-items-center"> <div class="top-actions d-flex align-items-center">
+                <div class="dropdown me-3">
+                    <a class="language-dropdown-toggle text-white text-decoration-none dropdown-toggle" href="#" role="button" id="languageDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-globe me-1"></i> <span id="currentLanguageText">English</span>
+                    </a>
+                    <ul class="dropdown-menu language-dropdown-menu" aria-labelledby="languageDropdown">
+                        <li><a class="dropdown-item language-select" href="#" data-lang="en">English</a></li>
+                        <li><a class="dropdown-item language-select" href="#" data-lang="fr">French</a></li>
+                    </ul>
+                </div>
+                <a href="#" class="text-white text-decoration-none" id="helpIconLink" data-bs-toggle="modal" data-bs-target="#chatbotModal">
+                    <i class="far fa-question-circle me-1"></i> <span data-lang-key="help">Help</span>
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark-custom py-3">
+        <div class="container">
+            <a class="navbar-brand me-auto" href="Home.html"> <img src="/Images/PAD logo.png" alt="Company Logo" class="img-fluid pad-logo">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item mx-md-3">
+                        <a class="nav-link" aria-current="page" href="Home.html">Home</a>
+                    </li>
+                    <li class="nav-item dropdown mx-md-3">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownCategories" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Categories
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdownCategories">
+                            <li><a class="dropdown-item" href="Nutrition.html">Nutrition</a></li>
+                            <li><a class="dropdown-item" href="Health.html">Health and Wellness</a></li>
+                            <li><a class="dropdown-item" href="Safety.html">Safety</a></li>
+                            <li><a class="dropdown-item" href="Articles.html">All Articles</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item mx-md-3">
+                        <a class="nav-link" href="Contact.html">Contact</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <section class="hero-section text-center text-white d-flex align-items-center justify-content-center articles-hero">
+        <div class="container">
+            <h1 class="display-4 mb-4">Articles</h1>
+            <p class="lead">Explore all our insightful articles</p>
+        </div>
+    </section>
+
+    <section class="py-5 nutrition-articles-bg">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 class="section-heading">Nutrition</h2>
+                <a href="Nutrition.html" class="see-all-link">See All <i class="fas fa-arrow-right ms-2"></i></a>
+            </div>
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <div class="article-card">
+                        <img src="" class="card-img-top" alt="Nutrition Food">
+                        <div class="card-body">
+                            <h5 class="card-title">Top 5 Energy-Boosting Meals for long workdays:</h5>
+                            <p class="card-text">Are you tired of feeling sluggish at work? These quick meals are packed with nutrients to keep you alert and productive.</p>
+                            <a href="#" class="btn read-more-btn">Read More</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="article-card">
+                        <img src="" class="card-img-top" alt="Nutrition Food">
+                        <div class="card-body">
+                            <h5 class="card-title">Top 5 Energy-Boosting Meals for long workdays:</h5>
+                            <p class="card-text">Are you tired of feeling sluggish at work? These quick meals are packed with nutrients to keep you alert and productive.</p>
+                            <a href="#" class="btn read-more-btn">Read More</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="article-card">
+                        <img src="" class="card-img-top" alt="Nutrition Food">
+                        <div class="card-body">
+                            <h5 class="card-title">Top 5 Energy-Boosting Meals for long workdays:</h5>
+                            <p class="card-text">Are you tired of feeling sluggish at work? These quick meals are packed with nutrients to keep you alert and productive.</p>
+                            <a href="#" class="btn read-more-btn">Read More</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </section>
+    <hr class="section-divider">
+
+    <section class="py-5 health-wellness-articles-bg">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 class="section-heading">Health and Wellness</h2>
+                <a href="Health.html" class="see-all-link">See All <i class="fas fa-arrow-right ms-2"></i></a>
+            </div>
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <div class="article-card">
+                        <img src="" class="card-img-top" alt="Health and Wellness">
+                        <div class="card-body">
+                            <h5 class="card-title">Top 5 Energy-Boosting Meals for long workdays:</h5>
+                            <p class="card-text">Are you tired of feeling sluggish at work? These quick meals are packed with nutrients to keep you alert and productive.</p>
+                            <a href="#" class="btn read-more-btn">Read More</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="article-card">
+                        <img src="" class="card-img-top" alt="Health and Wellness">
+                        <div class="card-body">
+                            <h5 class="card-title">Top 5 Energy-Boosting Meals for long workdays:</h5>
+                            <p class="card-text">Are you tired of feeling sluggish at work? These quick meals are packed with nutrients to keep you alert and productive.</p>
+                            <a href="#" class="btn read-more-btn">Read More</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="article-card">
+                        <img src="" class="card-img-top" alt="Health and Wellness">
+                        <div class="card-body">
+                            <h5 class="card-title">Top 5 Energy-Boosting Meals for long workdays:</h5>
+                            <p class="card-text">Are you tired of feeling sluggish at work? These quick meals are packed with nutrients to keep you alert and productive.</p>
+                            <a href="#" class="btn read-more-btn">Read More</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </section>
+    <hr class="section-divider">
+
+    <section class="py-5 health-wellness-articles-bg">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 class="section-heading">Safety</h2>
+                <a href="Safety.html" class="see-all-link">See All <i class="fas fa-arrow-right ms-2"></i></a>
+            </div>
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <div class="article-card">
+                        <img src="" class="card-img-top" alt="Health and Wellness">
+                        <div class="card-body">
+                            <h5 class="card-title">Top 5 Energy-Boosting Meals for long workdays:</h5>
+                            <p class="card-text">Are you tired of feeling sluggish at work? These quick meals are packed with nutrients to keep you alert and productive.</p>
+                            <a href="#" class="btn read-more-btn">Read More</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="article-card">
+                        <img src="" class="card-img-top" alt="Health and Wellness">
+                        <div class="card-body">
+                            <h5 class="card-title">Top 5 Energy-Boosting Meals for long workdays:</h5>
+                            <p class="card-text">Are you tired of feeling sluggish at work? These quick meals are packed with nutrients to keep you alert and productive.</p>
+                            <a href="#" class="btn read-more-btn">Read More</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="article-card">
+                        <img src="" class="card-img-top" alt="Health and Wellness">
+                        <div class="card-body">
+                            <h5 class="card-title">Top 5 Energy-Boosting Meals for long workdays:</h5>
+                            <p class="card-text">Are you tired of feeling sluggish at work? These quick meals are packed with nutrients to keep you alert and productive.</p>
+                            <a href="#" class="btn read-more-btn">Read More</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </section>
+
+    <footer class="footer py-3 text-center text-white">
+        <div class="container">
+            <p class="mb-0">© PAD 2025 ALL rights reserved.</p>
+        </div>
+    </footer>
+
+
+    <div class="modal fade" id="chatbotModal" tabindex="-1" aria-labelledby="chatbotModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered"> <div class="modal-content">
+                <div class="modal-header custom-chatbot-header p-3">
+                    <img src="Images/PAD logo.png" alt="PAD-CMS Logo" class="chatbot-header-logo me-2">
+                    <h5 class="modal-title flex-grow-1" id="chatbotModalLabel">Quick Assist</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+    
+                <div class="modal-body chatbot-body">
+                    <div id="chatMessages" class="mb-3">
+                        <div class="chat-message bot-message">Hello! How can I help you today?</div>
+                        </div>
+    
+                    <div class="chatbot-input-area mt-3">
+                        <input type="text" class="form-control" id="chatInput" placeholder="Type your message here...">
+                        <button class="btn btn-icon me-2" id="plusButton">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                        <button class="btn btn-icon" id="sendButton">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
+    
+                <div class="modal-footer custom-chatbot-footer">
+                    <p class="mb-0 text-white">&copy; 2025 PAD. All rights reserved.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/11.8.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/11.8.1/firebase-auth-compat.js"></script>
+    <script src="script.js" defer></script>
+    
+</body>
+</html>
