@@ -3,7 +3,7 @@
 // If you have firebase.initializeApp(firebaseConfig); in your adminDashboard.html,
 // ensure const db = firebase.firestore(); is also there right after it.
 // If you're putting it all in script.js, it should be here:
-const db = firebase.firestore(); 
+//const db = firebase.firestore(); 
 
 document.addEventListener('DOMContentLoaded', function() {
 
@@ -609,6 +609,7 @@ function setupDoctorNoteListeners() {
                     if (articleTitleInput) articleTitleInput.value = article.title;
                     if (articleContentInput) articleContentInput.value = article.content;
                     if (articleImageUrlInput) articleImageUrlInput.value = article.imageUrl;
+                    if (articleDescriptionInput) articleDescriptionInput.value = article.description;
                     if (articleCategoryInput) articleCategoryInput.value = article.category;
                     if (articleFormStatusInput) articleFormStatusInput.checked = (article.status === 'published'); 
 
@@ -656,6 +657,7 @@ function setupDoctorNoteListeners() {
         articleTitleInput = document.getElementById('articleTitle');
         articleContentInput = document.getElementById('articleContent');
         articleImageUrlInput = document.getElementById('articleImageURL');
+        articleDescriptionInput = document.getElementById('articleDescription');
         articleCategoryInput = document.getElementById('articleCategory');
         articleFormStatusInput = document.getElementById('articleFormStatus');
         saveArticleBtn = document.getElementById('saveArticleBtn');
@@ -722,6 +724,7 @@ function setupDoctorNoteListeners() {
                 const articleData = {
                     title: articleTitleInput.value.trim(),
                     content: articleContentInput.value.trim(),
+                    description: articleDescriptionInput.value.trim(),
                     imageUrl: articleImageUrlInput.value.trim(),
                     category: articleCategoryInput.value.trim(),
                     status: articleFormStatusInput ? (articleFormStatusInput.checked ? 'published' : 'draft') : 'draft',
@@ -895,10 +898,10 @@ function setupDoctorNoteListeners() {
                             <input type="text" placeholder="Search articles..." class="form-control search-input">
                             <select class="form-select filter-select">
                                 <option value="">All Categories</option>
-                                <option value="Sleep and Rest">Sleep and Rest</option>
-                                <option value="Mental Health">Mental Health</option>
-                                <option value="Diet and Nutrition">Diet and Nutrition</option>
-                                <option value="Physical Activity">Physical Activity</option>
+                                <option value="Nutrition">Nutrition</option>
+                                <option value="Health and Wellness">Health and Wellness</option>
+                                <option value="Safety">Safety</option>
+                               
                             </select>
                         </div>
                     </div>
@@ -927,13 +930,17 @@ function setupDoctorNoteListeners() {
                                 <input type="text" class="form-control" id="articleTitle" required>
                             </div>
                             <div class="mb-3">
+                                <label for="articleDescription" class="form-label">Description</label>
+                                <input type="text" class="form-control" id="articleDescription" required>
+                            </div>
+                            <div class="mb-3">
                                 <label for="articleCategory" class="form-label">Category</label>
                                 <select class="form-select" id="articleCategory" required>
                                     <option value="">Select Category</option>
-                                    <option value="Sleep and Rest">Sleep and Rest</option>
-                                    <option value="Mental Health">Mental Health</option>
-                                    <option value="Diet and Nutrition">Diet and Nutrition</option>
-                                    <option value="Physical Activity">Physical Activity</option>
+                                    <option value="Nutrition">Nutrition</option>
+                                    <option value="Health and Wellness">Health and Wellness</option>
+                                    <option value="Safety">Safety</option>
+                                    
                                 </select>
                             </div>
                             <div class="mb-3">
@@ -1295,4 +1302,183 @@ function setupSettingsListeners() {
             showDashboardSection('settings');
         });
     }
+
+    // Function to load recent doctor's notes for the admin dashboard
+async function loadRecentDoctorNotesForAdmin(containerId, limit = 3) {
+    const container = document.getElementById(containerId);
+    if (!container) {
+        console.error(`Admin container with ID "${containerId}" not found for recent doctor notes.`);
+        return;
+    }
+    container.innerHTML = '<p class="text-center text-muted">Loading recent notes...</p>';
+
+    try {
+        if (typeof db === 'undefined' || db === null) {
+            throw new Error("Firestore 'db' object is not defined.");
+        }
+
+        const snapshot = await db.collection("doctorNotes")
+            .orderBy("createdAt", "desc") 
+            .limit(limit)
+            .get();
+
+        container.innerHTML = ''; 
+
+        if (snapshot.empty) {
+            container.innerHTML = '<p class="text-center text-muted">No recent doctor notes.</p>';
+            return;
+        }
+
+        let htmlContent = '<ul class="list-group list-group-flush">';
+        snapshot.forEach(doc => {
+            const note = doc.data();
+            const noteDate = note.createdAt ? new Date(note.createdAt.toDate()).toLocaleDateString() : 'N/A';
+            const statusIcon = note.status ? '<i class="fas fa-check-square text-success"></i>' : '<i class="fas fa-square text-warning"></i>'; // Font Awesome icons
+
+            htmlContent += `
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <div>
+                        ${statusIcon} <strong>${note.title}</strong>
+                        <small class="text-muted ms-2">${noteDate}</small>
+                    </div>
+                    <a href="doctor-note-detail.html?id=${doc.id}" class="btn btn-sm btn-outline-info">View</a>
+                </li>
+            `;
+        });
+        htmlContent += '</ul>';
+        container.innerHTML = htmlContent;
+
+    } catch (error) {
+        console.error("Error loading recent doctor notes for admin:", error);
+        container.innerHTML = '<p class="text-center text-danger">Error loading notes.</p>';
+    }
+}
+
+
+async function loadLatestArticlesForAdmin(containerId, limit = 3) {
+    const container = document.getElementById(containerId);
+    if (!container) {
+        console.error(`Admin container with ID "${containerId}" not found for latest articles.`);
+        return;
+    }
+    container.innerHTML = '<p class="text-center text-muted">Loading latest articles...</p>';
+
+    try {
+        if (typeof db === 'undefined' || db === null) {
+            throw new Error("Firestore 'db' object is not defined.");
+        }
+
+        const snapshot = await db.collection("articles")
+            .orderBy("createdAt", "desc") 
+            .limit(limit)
+            .get();
+
+        container.innerHTML = ''; 
+
+        if (snapshot.empty) {
+            container.innerHTML = '<p class="text-center text-muted">No recent articles.</p>';
+            return;
+        }
+
+        let htmlContent = '<ul class="list-group list-group-flush">';
+        snapshot.forEach(doc => {
+            const article = doc.data();
+            const articleDate = article.createdAt ? new Date(article.createdAt.toDate()).toLocaleDateString() : 'N/A';
+            const statusIcon = article.status ? '<i class="fas fa-check-square text-success"></i>' : '<i class="fas fa-square text-warning"></i>';
+
+            htmlContent += `
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <div>
+                        ${statusIcon} <strong>${article.title}</strong>
+                        <small class="text-muted ms-2">${articleDate}</small>
+                    </div>
+                    <a href="article-details.html?id=${doc.id}" class="btn btn-sm btn-outline-info">View</a>
+                </li>
+            `;
+        });
+        htmlContent += '</ul>';
+        container.innerHTML = htmlContent;
+
+    } catch (error) {
+        console.error("Error loading latest articles for admin:", error);
+        container.innerHTML = '<p class="text-center text-danger">Error loading articles.</p>';
+    }
+}
+
+
+async function loadAllArticlesForAdmin(containerId) {
+    const container = document.getElementById(containerId);
+    if (!container) {
+        console.error(`Admin container with ID "${containerId}" not found for all articles.`);
+        return;
+    }
+    container.innerHTML = '<p class="text-center text-muted">Loading all articles...</p>';
+
+    try {
+        if (typeof db === 'undefined' || db === null) {
+            throw new Error("Firestore 'db' object is not defined.");
+        }
+
+        const snapshot = await db.collection("articles")
+            .orderBy("createdAt", "desc") // Order all articles by date
+            .get();
+
+        container.innerHTML = ''; // Clear loading message
+
+        if (snapshot.empty) {
+            container.innerHTML = '<p class="text-center text-muted">No articles found.</p>';
+            return;
+        }
+
+        let htmlContent = '<ul class="list-group list-group-flush">';
+        snapshot.forEach(doc => {
+            const article = doc.data();
+            const articleDate = article.createdAt ? new Date(article.createdAt.toDate()).toLocaleDateString() : 'N/A';
+            const statusText = article.status ? 'Published' : 'Draft';
+            const statusClass = article.status ? 'text-success' : 'text-warning';
+
+            htmlContent += `
+                <li class="list-group-item d-flex align-items-center">
+                    <img src="${article.imageUrl || 'path/to/placeholder.jpg'}" alt="${article.title}" class="img-thumbnail me-3" style="width: 80px; height: 80px; object-fit: cover;">
+                    <div class="flex-grow-1">
+                        <h6>${article.title}</h6>
+                        <p class="mb-1 text-muted small">${article.category} | ${articleDate}</p>
+                        <span class="badge ${statusClass}">${statusText}</span>
+                    </div>
+                    <div class="ms-auto">
+                        <a href="edit-article.html?id=${doc.id}" class="btn btn-sm btn-outline-primary me-2">Edit</a>
+                        <button class="btn btn-sm btn-outline-danger" data-article-id="${doc.id}" onclick="deleteArticle('${doc.id}')">Delete</button>
+                    </div>
+                </li>
+            `;
+        });
+        htmlContent += '</ul>';
+        container.innerHTML = htmlContent;
+
+    } catch (error) {
+        console.error("Error loading all articles for admin:", error);
+        container.innerHTML = '<p class="text-center text-danger">Error loading all articles.</p>';
+    }
+}
+
+// Function to handle article deletion (requires Firebase Authentication/Admin SDK for real deletion)
+// This is a placeholder for now. Real deletion would happen on the server-side with Cloud Functions.
+async function deleteArticle(articleId) {
+    if (confirm("Are you sure you want to delete this article? This action cannot be undone.")) {
+        try {
+            if (typeof db === 'undefined' || db === null) {
+                throw new Error("Firestore 'db' object is not defined.");
+            }
+            // await db.collection('articles').doc(articleId).delete(); // This line performs the delete
+            console.log(`Simulating deletion of article: ${articleId}`); // Placeholder
+            alert('Article deleted successfully! (Simulated)'); // Placeholder
+            // After deletion, reload the list
+            loadAllArticlesForAdmin('all-articles-admin');
+            loadLatestArticlesForAdmin('latest-articles-admin'); // Also update latest
+        } catch (error) {
+            console.error("Error deleting article:", error);
+            alert(`Failed to delete article: ${error.message}`);
+        }
+    }
+}
 }); // End DOMContentLoaded

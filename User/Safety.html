@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Safety - CMS PAD</title>
+    <title data-lang-key="safetyPageTitle">Safety - CMS PAD</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -65,8 +65,8 @@
 
     <section class="hero-section text-center text-white d-flex align-items-center justify-content-center safety-hero">
         <div class="container">
-            <h1 class="display-4 mb-4">Safety</h1>
-            <p class="lead">Understanding Safety Practices and Emergency Preparedness</p>
+            <h1 class="display-4 mb-4" data-lang-key="safetyHeroTitle">Safety</h1>
+            <p class="lead" data-lang-key="safetyHeroText">Understanding Safety Practices and Emergency Preparedness</p>
         </div>
     </section>
 
@@ -74,13 +74,12 @@
         <div class="container">
             <div class="row align-items-center">
                 <div class="col-lg-6 mb-4 mb-lg-0">
-                    <h2 class="article-heading mb-3">How to use a Fire Extinguisher Properly</h2>
-                    <p class="article-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididuntut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                    <h2 class="article-heading mb-3" id="main-safety-article-title">How to Use a Fire Extinguisher</h2>
+                    <p class="article-text" id="main-safety-article-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sed nisi erat. Etiam scelerisque convallis gravida. Etiam ac laoreet metus. Praesent ut velit ultrices, tempor nulla ut, efficitur nulla. Pellentesque sed ex eu ipsum volutpat consequat a sit amet massa. Nam aliquam commodo consectetur. Maecenas congue tempus pharetra. Praesent in luctus massa. Duis eu nisl tellus. Integer a massa rhoncus, dictum enim vitae, dignissim lectus. Vestibulum elementum libero nec ipsum tincidunt, eu pulvinar lorem dictum. Vivamus pharetra magna mi, ultricies posuere lectus finibus id.</p>
                 </div>
                 <div class="col-lg-6">
                     <div class="video-container">
-                        <iframe class="youtube-embed" src="https://www.youtube.com/embed/DQeAwADGi0M?si=cYqkBGywLZpMoNCB" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-                        
+                        <iframe width="560" height="315" src="https://www.youtube.com/embed/DQeAwADGi0M?si=rpWNq7CMppRBQILa" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
                     </div>
                 </div>
             </div>
@@ -89,48 +88,13 @@
 
     <section class="content-category-section py-5 hazard-awareness-bg">
         <div class="container">
-            <h3 class="category-title mb-4">Hazard awareness</h3>
+            <h3 class="category-title mb-4" data-lang-key="hazardAwarenessTitle">Hazard awareness</h3>
             <div class="category-cards-wrapper">
                 <button class="arrow-btn category-arrow-left" onclick="scrollCategory('hazard-awareness-cards', -300)">
                     <i class="fas fa-chevron-left"></i>
                 </button>
                 <div class="category-cards" id="hazard-awareness-cards">
-                    <div class="category-card">
-                        <img src="" class="card-img-top" alt="Electrical safety and machine handling tips">
-                        <div class="card-body">
-                            <h5 class="card-title">Electrical safety and machine handling tips</h5>
-                            <a href="#" class="btn btn-primary custom-btn-read-more">Read More</a>
-                        </div>
                     </div>
-                    <div class="category-card">
-                        <img src="" class="card-img-top" alt="Electrical safety and machine handling tips">
-                        <div class="card-body">
-                            <h5 class="card-title">Electrical safety and machine handling tips</h5>
-                            <a href="#" class="btn btn-primary custom-btn-read-more">Read More</a>
-                        </div>
-                    </div>
-                    <div class="category-card">
-                        <img src="" class="card-img-top" alt="Electrical safety and machine handling tips">
-                        <div class="card-body">
-                            <h5 class="card-title">Electrical safety and machine handling tips</h5>
-                            <a href="#" class="btn btn-primary custom-btn-read-more">Read More</a>
-                        </div>
-                    </div>
-                    <div class="category-card">
-                        <img src="" class="card-img-top" alt="Electrical safety and machine handling tips">
-                        <div class="card-body">
-                            <h5 class="card-title">Electrical safety and machine handling tips</h5>
-                            <a href="#" class="btn btn-primary custom-btn-read-more">Read More</a>
-                        </div>
-                    </div>
-                     <div class="category-card">
-                        <img src="" class="card-img-top" alt="Electrical safety and machine handling tips">
-                        <div class="card-body">
-                            <h5 class="card-title">Electrical safety and machine handling tips</h5>
-                            <a href="#" class="btn btn-primary custom-btn-read-more">Read More</a>
-                        </div>
-                    </div>
-                </div>
                 <button class="arrow-btn category-arrow-right" onclick="scrollCategory('hazard-awareness-cards', 300)">
                     <i class="fas fa-chevron-right"></i>
                 </button>
@@ -140,59 +104,23 @@
 
     <section class="content-category-section py-5 responding-emergencies-bg">
         <div class="container">
-            <h3 class="category-title mb-4">Responding to emergencies</h3>
+            <h3 class="category-title mb-4" data-lang-key="respondingEmergenciesTitle">Responding to emergencies</h3>
             <div class="category-cards-wrapper">
                 <button class="arrow-btn category-arrow-left" onclick="scrollCategory('responding-emergencies-cards', -300)">
                     <i class="fas fa-chevron-left"></i>
                 </button>
                 <div class="category-cards" id="responding-emergencies-cards">
-                    <div class="category-card">
-                        <img src="" class="card-img-top" alt="How to respond during floods, fires, and first-aid for common injuries">
-                        <div class="card-body">
-                            <h5 class="card-title">How to respond during floods, fires, and first-aid for common injuries</h5>
-                            <a href="#" class="btn btn-primary custom-btn-read-more">Read More</a>
-                        </div>
                     </div>
-                    <div class="category-card">
-                        <img src="" class="card-img-top" alt="How to respond during floods, fires, and first-aid for common injuries">
-                        <div class="card-body">
-                            <h5 class="card-title">How to respond during floods, fires, and first-aid for common injuries</h5>
-                            <a href="#" class="btn btn-primary custom-btn-read-more">Read More</a>
-                        </div>
-                    </div>
-                    <div class="category-card">
-                        <img src="" class="card-img-top" alt="How to respond during floods, fires, and first-aid for common injuries">
-                        <div class="card-body">
-                            <h5 class="card-title">How to respond during floods, fires, and first-aid for common injuries</h5>
-                            <a href="#" class="btn btn-primary custom-btn-read-more">Read More</a>
-                        </div>
-                    </div>
-                    <div class="category-card">
-                        <img src="" class="card-img-top" alt="How to respond during floods, fires, and first-aid for common injuries">
-                        <div class="card-body">
-                            <h5 class="card-title">How to respond during floods, fires, and first-aid for common injuries</h5>
-                            <a href="#" class="btn btn-primary custom-btn-read-more">Read More</a>
-                        </div>
-                    </div>
-                     <div class="category-card">
-                        <img src="" class="card-img-top" alt="How to respond during floods, fires, and first-aid for common injuries">
-                        <div class="card-body">
-                            <h5 class="card-title">How to respond during floods, fires, and first-aid for common injuries</h5>
-                            <a href="#" class="btn btn-primary custom-btn-read-more">Read More</a>
-                        </div>
-                    </div>
-                </div>
                 <button class="arrow-btn category-arrow-right" onclick="scrollCategory('responding-emergencies-cards', 300)">
                     <i class="fas fa-chevron-right"></i>
                 </button>
             </div>
-            
         </div>
     </section>
 
     <footer class="footer py-3 text-center text-white">
         <div class="container">
-            <p class="mb-0">&copy; PAD 2025 ALL rights reserved.</p>
+            <p class="mb-0" data-lang-key="footerText">© PAD 2025 ALL rights reserved.</p>
         </div>
     </footer>
 
@@ -221,31 +149,31 @@
                 </div>
     
                 <div class="modal-footer custom-chatbot-footer">
-                    <p class="mb-0 text-white">&copy; 2025 PAD. All rights reserved.</p>
+                    <p class="mb-0 text-white">© 2025 PAD. All rights reserved.</p>
                 </div>
             </div>
         </div>
     </div>
 
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-          <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
-          <script>
-              
-              const firebaseConfig = {
-                  apiKey: "AIzaSyB4nOwB8Ne5zwGHAD6CIZ3aXpV0WhqUC8g",
-                  authDomain:  "cms-13eb6.firebaseapp.com",
-                  projectId: "cms-13eb6",
-                  storageBucket: "cms-13eb6.firebasestorage.app",
-                  messagingSenderId: "588391631442",
-                  appId: "1:588391631442:web:f616547146cfeb59312d8b",
-            
+            <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+            <script>
+                
+                const firebaseConfig = {
+                    apiKey: "AIzaSyB4nOwB8Ne5zwGHAD6CIZ3aXpV0WhqUC8g",
+                    authDomain:   "cms-13eb6.firebaseapp.com",
+                    projectId: "cms-13eb6",
+                    storageBucket: "cms-13eb6.firebasestorage.app",
+                    messagingSenderId: "588391631442",
+                    appId: "1:588391631442:web:f616547146cfeb59312d8b",
+                
                 };
                 
                 // Initialize Firebase
                 firebase.initializeApp(firebaseConfig);
 
-                
-                    console.log("Firebase initialized!");
+                const db = firebase.firestore();
+                        console.log("Firebase initialized!");
                 </script>
 
                 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>

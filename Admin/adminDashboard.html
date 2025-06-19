@@ -85,41 +85,27 @@
                     <div class="col-12 col-lg-6">
                         <div class="card shadow-sm p-4">
                             <h3 class="card-title text-primary">Recent Doctor's Note</h3>
-                            <ul class="list-unstyled" id="recentDoctorNotesList">
-                                <li><i class="fas fa-check-square text-success me-2"></i> Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</li>
-                                <li><i class="fas fa-check-square text-success me-2"></i> Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</li>
-                                <li><i class="fas fa-check-square text-success me-2"></i> Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</li>
-                            </ul>
+                            <div class="card-body" id="recent-doctor-notes-admin">
+                                <p class="text-center text-muted">Loading recent notes...</p>
+                            </div>
+                                
                             <button class="btn btn-primary mt-3 d-block mx-auto">View All</button>
                         </div>
                     </div>
                     <div class="col-12 col-lg-6">
                         <div class="card shadow-sm p-4">
                             <h3 class="card-title text-primary">Latest Updates</h3>
-                            <ul class="list-unstyled" id="latestUpdatesList">
-                                <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</li>
-                                <li>Sed do eiusmod tempor incididunt ut labore et dolore.</li>
-                                <li>Magna aliqua. Ut enim ad minim veniam, quis nostrud.</li>
-                            </ul>
+                            <div class="card-body" id="latest-articles-admin">
+                                <p class="text-center text-muted">Loading latest articles...</p>
+                            </div>
                             <button class="btn btn-primary mt-3 d-block mx-auto">View All</button>
                         </div>
                     </div>
                     <div class="col-12"> <div class="card shadow-sm p-4">
                             <h3 class="card-title text-primary">All Articles</h3>
-                            <ul class="list-unstyled article-list-dashboard" id="latestArticlesDashboardList">
-                                <li class="d-flex align-items-center py-2 border-bottom">
-                                    <img src="/Images/Doctor-patient.jpg" alt="Article Thumbnail" class="rounded me-3">
-                                    <span>Stress Management Techniques</span>
-                                </li>
-                                <li class="d-flex align-items-center py-2 border-bottom">
-                                    <img src="/Images/Doctor-patient.jpg" alt="Article Thumbnail" class="rounded me-3">
-                                    <span>Healthy eating habits</span>
-                                </li>
-                                <li class="d-flex align-items-center py-2">
-                                    <img src="/Images/Doctor-patient.jpg" alt="Article Thumbnail" class="rounded me-3">
-                                    <span>Workplace safety measures</span>
-                                </li>
-                            </ul>
+                            <div class="card-body" id="all-articles-admin">
+                                <p class="text-center text-muted">Loading all articles...</p>
+                            </div>
                             <button class="btn btn-primary mt-3 d-block mx-auto">View All</button>
                         </div>
                     </div>
@@ -135,9 +121,10 @@
       
           
           
-          <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+          
           <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
           <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+          <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
           <script>
               
               const firebaseConfig = {
@@ -153,7 +140,7 @@
                 // Initialize Firebase
                 firebase.initializeApp(firebaseConfig);
 
-                
+                const db = firebase.firestore(); 
                     console.log("Firebase initialized!");
                 </script>
 

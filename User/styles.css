@@ -217,7 +217,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 /* Hero Section */
 .hero-section {
-    /*background-image: url('Images/Doctor-patient.jpg');*/
+    background-image: url('Images/Doctor-patient.jpg');
     background-size: cover;
     background-position: center;
     min-height: 300px;
