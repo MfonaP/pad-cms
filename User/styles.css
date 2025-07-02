@@ -215,9 +215,9 @@ h1, h2, h3, h4, h5, h6 {
     }
     
 }
-/* Hero Section */
+
 .hero-section {
-    background-image: url('Images/Doctor-patient.jpg');
+    background-image: url('/Images/Home.jpg');
     background-size: cover;
     background-position: center;
     min-height: 300px;
@@ -492,6 +492,32 @@ h1, h2, h3, h4, h5, h6 {
     color: var(--primary-blue);
 }
 
+.hero-section {
+    background-image: url('/Images/Home.jpg');
+    background-size: cover;
+    background-position: center;
+    min-height: 300px;
+    padding: 100px 0;
+    position: relative;
+    z-index: 1;
+}
+
+.hero-section::before {
+    
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5); 
+    z-index: -1;
+}
+
+.hero-section h1 {
+    font-weight: 700;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+}
+
 .nutrition-article-card {
     border: none;
     border-radius: 8px;
@@ -629,6 +655,33 @@ h1, h2, h3, h4, h5, h6 {
 .health-wellness-body{
     background: radial-gradient(var(--primary-blue)0%, var(--primary-blue)30%, var(--yellow-lime)100%);
 }
+
+.hero-section {
+    background-image: url('/Images/Home.jpg');
+    background-size: cover;
+    background-position: center;
+    min-height: 300px;
+    padding: 100px 0;
+    position: relative;
+    z-index: 1;
+}
+
+.hero-section::before {
+    
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5); 
+    z-index: -1;
+}
+
+.hero-section h1 {
+    font-weight: 700;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+}
+
 .sleep-rest-bg {
     background-color: var(--text-color-light);
     border-top-left-radius: 40px;
@@ -728,13 +781,6 @@ h1, h2, h3, h4, h5, h6 {
     transition: background-color 0.3s ease, border-color 0.3s ease;
 }*/
 
-.custom-btn-read-more:hover {
-    background-color: #4CAF50;
-    border-color: #4CAF50;
-    color: white;
-}
-
-
 /* Arrow Buttons for Categories */
 .arrow-btn {
     background-color: white;
@@ -817,6 +863,31 @@ h1, h2, h3, h4, h5, h6 {
 .article-text {
     color: var(--text-color-gray); 
     line-height: 1.6;
+}
+
+.hero-section {
+    background-image: url('/Images/Home.jpg');
+    background-size: cover;
+    background-position: center;
+    min-height: 300px;
+    padding: 100px 0;
+    position: relative;
+    z-index: 1;
+}
+
+.hero-section::before {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5); 
+    z-index: -1;
+}
+
+.hero-section h1 {
+    font-weight: 700;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
 }
 
 .video-container {
@@ -1030,6 +1101,31 @@ h1, h2, h3, h4, h5, h6 {
     font-weight: 700;
 }
 
+.hero-section {
+    background-image: url('/Images/Home.jpg');
+    background-size: cover;
+    background-position: center;
+    min-height: 300px;
+    padding: 100px 0;
+    position: relative;
+    z-index: 1;
+}
+
+.hero-section::before {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5); 
+    z-index: -1;
+}
+
+.hero-section h1 {
+    font-weight: 700;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+}
+
 .contact-form {
     background-color: var(--text-color-light); 
     border-radius: 8px;
@@ -1227,6 +1323,32 @@ background-color: var(--text-color-light);
     color: var(--primary-blue); 
     font-size: 1.15rem;
     font-weight: 700;
+}
+
+.hero-section {
+    background-image: url('/Images/Home.jpg');
+    background-size: cover;
+    background-position: center;
+    min-height: 300px;
+    padding: 100px 0;
+    position: relative;
+    z-index: 1;
+}
+
+.hero-section::before {
+    
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5); 
+    z-index: -1;
+}
+
+.hero-section h1 {
+    font-weight: 700;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
 }
 
 
