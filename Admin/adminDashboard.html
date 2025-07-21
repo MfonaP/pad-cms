@@ -54,27 +54,17 @@
                         <i class="fas fa-bars"></i>
                     </button>
 
-                    <span class="navbar-text ms-md-auto me-3 d-none d-lg-block">Welcome back, Admin!</span>
+                    <h4 class="navbar-text ms-md-auto me-3 d-none d-lg-block">Welcome back, Admin!</h4>
                     
-                    <form class="d-flex me-3 search-bar-custom">
-                        <div class="input-group">
-                            <span class="input-group-text bg-light border-0"><i class="fas fa-search text-muted"></i></span>
-                            <input type="text" class="form-control bg-light border-0" placeholder="Search">
-                        </div>
-                    </form>
+                    
 
                     <ul class="navbar-nav">
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle d-flex align-items-center text-decoration-none text-dark" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <a class="nav-link" >
                                 <img src="/Images/Doctor.jpg" alt="Dr. XYZ" class="user-avatar me-2">
                                 <span class="d-none d-lg-inline fw-bold text-primary">Dr. XYZ</span>
                             </a>
-                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                <li><a class="dropdown-item" href="#">Profile</a></li>
-                                <li><a class="dropdown-item" href="#">Settings</a></li>
-                                
-                                
-                            </ul>
+                            
                         </li>
                     </ul>
                 </div>
@@ -85,30 +75,23 @@
                     <div class="col-12 col-lg-6">
                         <div class="card shadow-sm p-4">
                             <h3 class="card-title text-primary">Recent Doctor's Note</h3>
-                            <div class="card-body" id="recent-doctor-notes-admin">
+                            <div class="card-body" id="recentDoctorsNotesList">
                                 <p class="text-center text-muted">Loading recent notes...</p>
                             </div>
                                 
-                            <button class="btn btn-primary mt-3 d-block mx-auto">View All</button>
+                            <button class="btn btn-primary mt-3 d-block mx-auto view-all-notes-btn">View All</button>
                         </div>
                     </div>
                     <div class="col-12 col-lg-6">
                         <div class="card shadow-sm p-4">
-                            <h3 class="card-title text-primary">Latest Updates</h3>
-                            <div class="card-body" id="latest-articles-admin">
+                            <h3 class="card-title text-primary">Latest Articles</h3>
+                            <div class="card-body" id="latestArticlesList">
                                 <p class="text-center text-muted">Loading latest articles...</p>
                             </div>
-                            <button class="btn btn-primary mt-3 d-block mx-auto">View All</button>
+                            <button class="btn btn-primary mt-3 d-block mx-auto view-all-articles-btn">View All</button>
                         </div>
                     </div>
-                    <div class="col-12"> <div class="card shadow-sm p-4">
-                            <h3 class="card-title text-primary">All Articles</h3>
-                            <div class="card-body" id="all-articles-admin">
-                                <p class="text-center text-muted">Loading all articles...</p>
-                            </div>
-                            <button class="btn btn-primary mt-3 d-block mx-auto">View All</button>
-                        </div>
-                    </div>
+                    
                 </div>
             </div>
         </div>

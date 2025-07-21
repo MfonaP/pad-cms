@@ -1,14 +1,8 @@
-// --- 0. Firestore Initialization (MUST BE AT THE VERY TOP) ---
-// This line needs to be global or accessible where 'db' is used.
-// If you have firebase.initializeApp(firebaseConfig); in your adminDashboard.html,
-// ensure const db = firebase.firestore(); is also there right after it.
-// If you're putting it all in script.js, it should be here:
-//const db = firebase.firestore(); 
 
 document.addEventListener('DOMContentLoaded', function() {
 
-    // --- 1. DOM Element Declarations (ALL ELEMENTS HERE FOR CLARITY) ---
-    // These should be declared once the DOM is ready.
+    // --- 1. DOM Element Declarations  ---
+    
     const dashboardContentDiv = document.getElementById('dashboardContent');
     const dashboardLink = document.getElementById('dashboardLink');
     const doctorNoteLink = document.getElementById('doctorNoteLink');
@@ -17,6 +11,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const logoutBtn = document.getElementById('logoutBtn');
     const mobileRestrictionMessage = document.getElementById('mobileRestrictionMessage');
     const wrapper = document.getElementById('wrapper'); // The main dashboard wrapper
+    const viewAllNotesBtn = dashboardContentDiv.querySelector('.view-all-notes-btn');
+    const viewAllArticlesBtn = dashboardContentDiv.querySelector('.view-all-articles-btn');
+            
 
     // Article related elements (initially null, will be queried when section is loaded)
     let addNewArticleBtn = null;
@@ -29,7 +26,7 @@ document.addEventListener('DOMContentLoaded', function() {
     let articleFormStatusInput = null;
     let saveArticleBtn = null;
     let cancelArticleFormBtn = null;
-    let articlesTableBody = null; // This will hold the tbody element
+    let articlesTableBody = null; 
     let articleFormTitle = null;
 
 
@@ -43,57 +40,24 @@ document.addEventListener('DOMContentLoaded', function() {
     let noteFormStatusInput = null;
     let saveNoteBtn = null;
     let cancelNoteFormBtn = null;
-    let notesTableBody = null; // This will hold the tbody element
+    let notesTableBody = null; 
     let noteFormTitle = null;
 
     // --- 2. GLOBAL VARIABLES ---
     let currentEditingArticleId = null;
     let currentEditingDoctorNoteId = null;
 
-    // --- Initial Dummy Data (Doctor's Notes - NOT YET FIRESTORE ENABLED) ---
-    // This will remain local until you decide to migrate Doctor's Notes to Firestore as well.
-    /*let doctorNotesData = [
-        {
-            id: 101,
-            title: 'Understanding Common Cold Symptoms',
-            date: '2024-01-10',
-            status: true, // true for Published, false for Draft
-            content: 'The common cold is a viral infection of your nose and throat. Symptoms include runny nose, sore throat, cough, congestion, and sometimes body aches. It usually resolves within 7-10 days. Rest, fluids, and over-the-counter medications can help manage symptoms.'
-        },
-        {
-            id: 102,
-            title: 'Benefits of a Balanced Diet',
-            date: '2024-02-15',
-            status: false,
-            content: 'A balanced diet provides your body with essential nutrients, promoting overall health and well-being. It can reduce the risk of chronic diseases, improve energy levels, and support a healthy immune system. Focus on whole foods, lean proteins, fruits, vegetables, and healthy fats.'
-        },
-        {
-            id: 103,
-            title: 'Importance of Regular Exercise',
-            date: '2024-03-20',
-            status: true,
-            content: 'Regular physical activity is vital for a healthy lifestyle. It strengthens your heart and lungs, builds strong bones and muscles, reduces the risk of many diseases, and improves mood. Aim for at least 30 minutes of moderate-intensity exercise most days of the week.'
-        },
-        {
-            id: 104,
-            title: 'Managing Seasonal Allergies',
-            date: '2024-04-05',
-            status: true,
-            content: 'Seasonal allergies can cause sneezing, itchy eyes, runny nose, and congestion. They are triggered by pollen from trees, grasses, and weeds. Antihistamines, nasal sprays, and avoiding allergens can help manage symptoms. Consult a doctor for severe cases.'
-        }
-    ];
-    let nextDoctorNoteId = doctorNotesData.length > 0 ? Math.max(...doctorNotesData.map(n => n.id)) + 1 : 201;*/
-
+    
 
     // --- 3. AUTHENTICATION AND INITIAL DISPLAY ---
     firebase.auth().onAuthStateChanged(function(user) {
         if (user) {
             console.log("User is logged in:", user.email);
-            // Show the dashboard section after auth state is determined
-            showDashboardSection('dashboard'); // Changed from 'dashboardContent' to 'dashboard' to match function logic
+            
+            showDashboardSection('dashboard'); 
         } else {
             console.log("No user is logged in. Redirecting to login page.");
-            // Ensure redirection only happens if not already on the login page
+            
             if (window.location.pathname !== '/adminLogin.html' && window.location.pathname !== '/adminLogin.html/') {
                 window.location.href = 'adminLogin.html';
             }
@@ -103,7 +67,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Logout button event listener
     if (logoutBtn) {
         logoutBtn.addEventListener('click', function(event) {
-            event.preventDefault(); // Prevent default link behavior if it's an <a> tag
+            event.preventDefault(); 
 
             firebase.auth().signOut().then(() => {
                 console.log("User signed out successfully.");
@@ -119,8 +83,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // --- 4. Mobile Restriction Check ---
-    const MOBILE_BREAKPOINT = 768; // Bootstrap's 'md' breakpoint
-
+    const MOBILE_BREAKPOINT = 768; 
     function checkMobileAccess() {
         if (window.innerWidth < MOBILE_BREAKPOINT) {
             mobileRestrictionMessage.style.display = 'flex'; // Show message
@@ -138,10 +101,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Run check whenever the window is resized
     window.addEventListener('resize', checkMobileAccess);
-
-    // IMPORTANT: DO NOT `return;` here. Let the script continue to attach listeners
-    // The UI will be hidden by `checkMobileAccess`, but core JS must run.
-
 
     // --- 5. Helper Function to Manage Active Sidebar Links ---
     function activateNavLink(linkElement) {
@@ -240,11 +199,6 @@ document.addEventListener('DOMContentLoaded', function() {
             field.classList.remove('is-valid');
         });
     }
-
-    // --- 9. DOCTOR'S NOTE FUNCTIONS (STILL USES LOCAL DATA) ---
-
-    // Function to render the doctor's notes table from the doctorNotesData array
-    // --- DOCTOR'S NOTE MANAGEMENT (NOW FULLY FIRESTORE ENABLED) ---
 
 // Helper function for form validation feedback (ensures consistency)
 function setValidationFeedback(input, isValid, message) {
@@ -434,11 +388,11 @@ async function handleNoteStatusToggleFirestore(event) {
     }
 }
 
-// Listener setup for Doctor's Notes section (called after HTML injection)
+
 // This is the main function that gets called when the 'Doctor Note' section is displayed.
 function setupDoctorNoteListeners() {
     // Get references to DOM elements *after* the HTML for the section is injected
-    // These should correspond to the IDs in your HTML for the doctorNote section
+   
     addNoteBtn = document.getElementById('addNoteBtn');
     noteFormContainer = document.getElementById('noteFormContainer');
     noteForm = document.getElementById('noteForm');
@@ -456,10 +410,10 @@ function setupDoctorNoteListeners() {
     if (addNoteBtn) {
         addNoteBtn.addEventListener('click', () => {
             if (noteFormContainer) noteFormContainer.style.display = 'block';
-            if (noteListTable) noteListTable.style.display = 'none'; // Hide the table div
-            if (noteForm) noteForm.reset(); // Clear form fields
+            if (noteListTable) noteListTable.style.display = 'none'; 
+            if (noteForm) noteForm.reset(); 
             if (noteFormTitle) noteFormTitle.textContent = 'Add New Doctor\'s Note';
-            currentEditingDoctorNoteId = null; // Reset for new note
+            currentEditingDoctorNoteId = null; 
             clearFormValidation(noteForm);
         });
     }
@@ -468,16 +422,16 @@ function setupDoctorNoteListeners() {
     if (cancelNoteFormBtn) {
         cancelNoteFormBtn.addEventListener('click', () => {
             if (noteFormContainer) noteFormContainer.style.display = 'none';
-            if (noteListTable) noteListTable.style.display = 'block'; // Show the table div
+            if (noteListTable) noteListTable.style.display = 'block'; 
             if (noteForm) noteForm.reset();
             clearFormValidation(noteForm);
-            currentEditingDoctorNoteId = null; // Reset
+            currentEditingDoctorNoteId = null; 
         });
     }
 
-    // Note Form Submission (updated to use Firestore)
+    // Note Form Submission 
     if (noteForm) {
-        noteForm.addEventListener('submit', async (event) => { // Made async for Firestore operations
+        noteForm.addEventListener('submit', async (event) => { 
             event.preventDefault();
             clearFormValidation(noteForm);
 
@@ -493,12 +447,12 @@ function setupDoctorNoteListeners() {
                 date: noteDateInput.value.trim(),
                 content: noteContentInput.value.trim(),
                 status: noteFormStatusInput.checked,
-                lastUpdated: firebase.firestore.FieldValue.serverTimestamp() // Always update lastUpdated
+                lastUpdated: firebase.firestore.FieldValue.serverTimestamp() 
             };
 
             try {
                 if (currentEditingDoctorNoteId) {
-                    // Update existing note in Firestore
+                   
                     await db.collection("doctorNotes").doc(currentEditingDoctorNoteId).update(noteData);
                     showToast('Doctor note updated successfully!', 'success');
                     console.log("Doctor note successfully updated!");
@@ -506,7 +460,7 @@ function setupDoctorNoteListeners() {
                     // Add new note to Firestore
                     const newNoteData = {
                         ...noteData,
-                        createdAt: firebase.firestore.FieldValue.serverTimestamp() // Add createdAt for new notes
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp() 
                     };
                     const docRef = await db.collection("doctorNotes").add(newNoteData);
                     showToast('Doctor note added successfully!', 'success');
@@ -548,7 +502,7 @@ function setupDoctorNoteListeners() {
         // Listen for real-time updates from Firestore
         db.collection("articles").orderBy("createdAt", "desc") // Order by creation time
             .onSnapshot((snapshot) => {
-                articlesTableBody.innerHTML = ''; // Clear existing
+                articlesTableBody.innerHTML = ''; 
                 if (snapshot.empty) {
                     articlesTableBody.innerHTML = '<tr><td colspan="5" class="text-center">No articles available. Click "Add New Article" to add one.</td></tr>';
                     return;
@@ -598,7 +552,7 @@ function setupDoctorNoteListeners() {
     // Handlers for Article Edit/Delete (will be called from setupArticleActionButtons)
     function handleEditArticle(event) {
         const articleId = event.target.dataset.id;
-        // Fetch article data from Firestore to populate the form
+        
         db.collection("articles").doc(articleId).get()
             .then(doc => {
                 if (doc.exists) {
@@ -619,7 +573,7 @@ function setupDoctorNoteListeners() {
 
                     // Show the form and hide the table
                     if (articleFormContainer) articleFormContainer.style.display = 'block';
-                    const articleListTable = document.getElementById('articleListTable'); // Get the parent div for table
+                    const articleListTable = document.getElementById('articleListTable'); 
                     if (articleListTable) articleListTable.style.display = 'none';
                     clearFormValidation(articleForm);
                 } else {
@@ -662,19 +616,19 @@ function setupDoctorNoteListeners() {
         articleFormStatusInput = document.getElementById('articleFormStatus');
         saveArticleBtn = document.getElementById('saveArticleBtn');
         cancelArticleFormBtn = document.getElementById('cancelArticleFormBtn');
-        articlesTableBody = document.querySelector('#articleListTable tbody'); // Select the tbody inside articleListTable
+        articlesTableBody = document.querySelector('#articleListTable tbody'); 
         articleFormTitle = document.getElementById('articleFormTitle');
-        const articleListTable = document.getElementById('articleListTable'); // Get the parent div for table
+        const articleListTable = document.getElementById('articleListTable'); 
 
 
         // Add New Article Button
         if (addNewArticleBtn) {
             addNewArticleBtn.addEventListener('click', () => {
                 if (articleFormContainer) articleFormContainer.style.display = 'block';
-                if (articleListTable) articleListTable.style.display = 'none'; // Hide the table when form is shown
-                if (articleForm) articleForm.reset(); // Clear form fields
+                if (articleListTable) articleListTable.style.display = 'none'; 
+                if (articleForm) articleForm.reset(); 
                 if (articleFormTitle) articleFormTitle.textContent = 'Add New Article';
-                currentEditingArticleId = null; // Reset current editing ID
+                currentEditingArticleId = null; 
                 clearFormValidation(articleForm);
             });
         }
@@ -683,7 +637,7 @@ function setupDoctorNoteListeners() {
         if (cancelArticleFormBtn) {
             cancelArticleFormBtn.addEventListener('click', () => {
                 if (articleFormContainer) articleFormContainer.style.display = 'none';
-                if (articleListTable) articleListTable.style.display = 'block'; // Show the table again
+                if (articleListTable) articleListTable.style.display = 'block'; 
                 if (articleForm) articleForm.reset();
                 clearFormValidation(articleForm);
             });
@@ -738,7 +692,7 @@ function setupDoctorNoteListeners() {
                         .then(() => {
                             showToast('Article updated successfully!', 'success');
                             console.log("Document successfully updated!");
-                            currentEditingArticleId = null; // Reset edit ID
+                            currentEditingArticleId = null; 
                         })
                         .catch((error) => {
                             showToast('Error updating article.', 'danger');
@@ -751,14 +705,14 @@ function setupDoctorNoteListeners() {
                             if (articleFormContainer) articleFormContainer.style.display = 'none';
                             if (articleListTable) articleListTable.style.display = 'block';
                             if (articleFormTitle) {
-                                articleFormTitle.textContent = 'Add New Article'; // Reset form title
+                                articleFormTitle.textContent = 'Add New Article'; 
                             }
                         });
                 } else {
                     // Add new article to Firestore
                     const newArticleData = {
                         ...articleData,
-                        createdAt: firebase.firestore.FieldValue.serverTimestamp() // Add timestamp for new articles
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp() 
                     };
 
                     db.collection("articles").add(newArticleData)
@@ -780,15 +734,15 @@ function setupDoctorNoteListeners() {
                 }
             });
         }
-        renderArticlesTable(); // Initial render of articles table after listeners are set up
+        renderArticlesTable(); 
     }
 
 
     // --- 11. MAIN CONTENT RENDERING FUNCTION ---
-    let currentAdminContentSection = 'dashboard'; // Keep track of current section
+    let currentAdminContentSection = 'dashboard'; // Keeps track of current section
 
     function showDashboardSection(sectionId) {
-        // Hide all dashboard sections first
+        
         const sections = document.querySelectorAll('.dashboard-section');
         sections.forEach(section => {
             section.style.display = 'none';
@@ -802,48 +756,100 @@ function setupDoctorNoteListeners() {
                     <div class="col-12 col-lg-6">
                         <div class="card shadow-sm p-4">
                             <h3 class="card-title text-primary">Recent Doctor's Note</h3>
-                            <ul class="list-unstyled" id="recentDoctorNotesList">
-                                <li><i class="fas fa-check-square text-success me-2"></i> Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</li>
-                                <li><i class="fas fa-check-square text-success me-2"></i> Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</li>
-                                <li><i class="fas fa-check-square text-success me-2"></i> Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</li>
-                            </ul>
+                            
                             <button class="btn btn-primary mt-3 d-block mx-auto view-all-notes-btn">View All</button>
                         </div>
                     </div>
                     <div class="col-12 col-lg-6">
                         <div class="card shadow-sm p-4">
-                            <h3 class="card-title text-primary">Latest Updates</h3>
-                            <ul class="list-unstyled" id="latestUpdatesList">
-                                <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</li>
-                                <li>Sed do eiusmod tempor incididunt ut labore et dolore.</li>
-                                <li>Magna aliqua. Ut enim ad minim veniam, quis nostrud.</li>
-                                <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</li>
-                            </ul>
-                            <button class="btn btn-primary mt-3 d-block mx-auto">View All</button>
-                        </div>
-                    </div>
-                    <div class="col-12">
-                        <div class="card shadow-sm p-4">
-                            <h3 class="card-title text-primary">All Articles</h3>
-                            <ul class="list-unstyled article-list-dashboard" id="latestArticlesDashboardList">
-                                <li class="d-flex align-items-center py-2 border-bottom">
-                                    <img src="" alt="Article Thumbnail" class="rounded me-3">
-                                    <span>Stress Management Techniques</span>
-                                </li>
-                                <li class="d-flex align-items-center py-2 border-bottom">
-                                    <img src="" alt="Article Thumbnail" class="rounded me-3">
-                                    <span>Healthy eating habits</span>
-                                </li>
-                                <li class="d-flex align-items-center py-2">
-                                    <img src="" alt="Article Thumbnail" class="rounded me-3">
-                                    <span>Workplace safety measures</span>
-                                </li>
-                            </ul>
+                            <h3 class="card-title text-primary">Latest Articles</h3>
+                            
                             <button class="btn btn-primary mt-3 d-block mx-auto view-all-articles-btn">View All</button>
                         </div>
                     </div>
+                    
                 </div>
             `;
+
+            
+
+// Function to load the latest articles for the dashboard summary (latest articles and recent doctor's note)
+async function loadLatestArticlesSummary() {
+    const latestArticlesList = document.getElementById('latestArticlesList');
+    if (!latestArticlesList) {
+        console.error("Latest Articles List (ID: latestArticlesList) not found.");
+        return;
+    }
+    latestArticlesList.innerHTML = '<li class="list-group-item text-center text-muted">Loading articles...</li>'; // Show loading message
+
+    try {
+        const querySnapshot = await db.collection('articles')
+                                      .where('status', '==', true) 
+                                      .orderBy('createdAt', 'desc')
+                                      .limit(3) 
+                                      .get();
+
+        let articlesHtml = '';
+        if (querySnapshot.empty) {
+            articlesHtml = '<li class="list-group-item text-center text-muted">No recent articles.</li>';
+        } else {
+            querySnapshot.forEach(doc => {
+                const article = doc.data();
+                const articleTitle = article.title || 'Untitled';
+                
+                articlesHtml += `<li class="list-group-item">
+                                    <input type="checkbox" checked disabled>
+                                    ${articleTitle}
+                                  </li>`;
+            });
+        }
+        latestArticlesList.innerHTML = articlesHtml;
+    } catch (error) {
+        console.error("Error loading latest articles summary:", error);
+        latestArticlesList.innerHTML = '<li class="list-group-item text-center text-danger">Failed to load articles.</li>';
+    }
+}
+
+// Function to load the recent doctor's notes for the dashboard summary
+async function loadRecentDoctorsNotesSummary() {
+    const recentDoctorsNotesList = document.getElementById('recentDoctorsNotesList');
+    if (!recentDoctorsNotesList) {
+        console.error("Recent Doctor's Notes List (ID: recentDoctorsNotesList) not found.");
+        return;
+    }
+    recentDoctorsNotesList.innerHTML = '<li class="list-group-item text-center text-muted">Loading notes...</li>'; 
+
+    try {
+        const querySnapshot = await db.collection('doctorsNotes')
+                                      .orderBy('createdAt', 'desc') 
+                                      .limit(3) 
+                                      .get();
+
+        let notesHtml = '';
+        if (querySnapshot.empty) {
+            notesHtml = '<li class="list-group-item text-center text-muted">No recent doctor\'s notes.</li>';
+        } else {
+            querySnapshot.forEach(doc => {
+                const note = doc.data();
+                const noteContentPreview = (note.content || 'No content').substring(0, 50) + '...'; 
+                notesHtml += `<li class="list-group-item">
+                                    <input type="checkbox" checked disabled>
+                                    ${noteContentPreview}
+                                  </li>`;
+            });
+        }
+        recentDoctorsNotesList.innerHTML = notesHtml;
+    } catch (error) {
+        console.error("Error loading recent doctor's notes summary:", error);
+        recentDoctorsNotesList.innerHTML = '<li class="list-group-item text-center text-danger">Failed to load notes.</li>';
+    }
+}
+
+// Check if we are on the Admin Dashboard page
+if (window.location.pathname.includes('adminDashboard.html')) {
+    loadLatestArticlesSummary();
+    loadRecentDoctorsNotesSummary();
+}
         } else if (sectionId === 'doctorNote') {
             sectionHtml = `
                 <div class="doctor-note-section">
@@ -895,13 +901,12 @@ function setupDoctorNoteListeners() {
                     <div class="article-actions">
                         <button class="btn btn-primary add-article-btn" id="addNewArticleBtn"><i class="fas fa-plus"></i> Add New Article</button>
                         <div class="search-filter-controls">
-                            <input type="text" placeholder="Search articles..." class="form-control search-input">
-                            <select class="form-select filter-select">
+                            <input type="text" id="articleSearchInput" placeholder="Search articles..." class="form-control search-input">
+                            <select id="articleCategoryFilter" class="form-select filter-select">
                                 <option value="">All Categories</option>
                                 <option value="Nutrition">Nutrition</option>
                                 <option value="Health and Wellness">Health and Wellness</option>
                                 <option value="Safety">Safety</option>
-                               
                             </select>
                         </div>
                     </div>
@@ -1038,19 +1043,19 @@ function setupDoctorNoteListeners() {
             `;
         } else {
             console.error(`Section with ID "${sectionId}" not found.`);
-            return; // Exit if section is invalid
+            return; 
         }
 
         // Inject the HTML into the main content div
         if (dashboardContentDiv) {
             dashboardContentDiv.innerHTML = sectionHtml;
-            currentAdminContentSection = sectionId; // Update tracking variable
+            currentAdminContentSection = sectionId; 
         } else {
             console.error("Dashboard content div not found.");
             return;
         }
 
-        // After injecting HTML, set up listeners for the *newly loaded* elements
+        
         if (sectionId === 'dashboard') {
             dashboardContentDiv.querySelector('.view-all-notes-btn').addEventListener('click', () => {
                 activateNavLink(doctorNoteLink);
@@ -1062,10 +1067,17 @@ function setupDoctorNoteListeners() {
             });
         } else if (sectionId === 'doctorNote') {
             setupDoctorNoteListeners();
+            viewAllNotesBtn.addEventListener('click', () => {
+                window.location.hash = '#doctorsNote'; 
+            });
+        
         } else if (sectionId === 'manageArticles') {
             setupArticleListeners();
+            viewAllArticlesBtn.addEventListener('click', () => {
+            window.location.hash = '#manageArticles'; 
+        });
         } else if (sectionId === 'settings') {
-            // Initialize Bootstrap tabs after content is loaded
+            
             const settingsTabElement = document.getElementById('settingsTab');
             if (settingsTabElement) {
                 new bootstrap.Tab(settingsTabElement.querySelector('.nav-link.active')).show();
@@ -1086,10 +1098,10 @@ function setupDoctorNoteListeners() {
 async function loadAdminProfile() {
     const user = firebase.auth().currentUser;
     if (user && db && adminNameInput && adminEmailInput) {
-        // Set email (from Auth) immediately
+        
         adminEmailInput.value = user.email || '';
 
-        // Try to get name and photo from Firestore (which is more persistent)
+       
         try {
             const userDoc = await db.collection("users").doc(user.uid).get();
             if (userDoc.exists) {
@@ -1097,7 +1109,7 @@ async function loadAdminProfile() {
                 adminNameInput.value = userData.name || user.displayName || '';
                 
             } else {
-                // If no Firestore document, use Auth displayName
+                
                 adminNameInput.value = user.displayName || '';
                
             }
@@ -1117,7 +1129,7 @@ async function loadAdminProfile() {
     }
 }
 
-// Handler for saving profile details (name)
+// Handler for saving profile details 
 async function handleSaveProfileDetails(event) {
     event.preventDefault();
     clearFormValidation(adminProfileForm);
@@ -1147,7 +1159,7 @@ async function handleSaveProfileDetails(event) {
         await db.collection("users").doc(user.uid).set({
             name: newName,
             lastUpdated: firebase.firestore.FieldValue.serverTimestamp()
-        }, { merge: true }); // Use merge: true to avoid overwriting other fields like 'role'
+        }, { merge: true }); 
         console.log("Firestore user name updated.");
 
         showToast('Profile details updated successfully!', 'success');
@@ -1208,7 +1220,7 @@ async function handleChangePassword(event) {
 
         await user.updatePassword(newPassword);
         showToast('Password changed successfully!', 'success');
-        changePasswordForm.reset(); // Clear the form
+        changePasswordForm.reset(); 
         clearFormValidation(changePasswordForm);
     } catch (error) {
         console.error("Error changing password:", error);
@@ -1231,7 +1243,7 @@ async function handleChangePassword(event) {
 
 // Listener setup for the Settings section
 function setupSettingsListeners() {
-    // Get references to DOM elements after HTML injection
+    
     profilePictureDisplay = document.getElementById('profilePictureDisplay');
     profilePictureInput = document.getElementById('profilePictureInput');
     saveProfilePictureBtn = document.getElementById('saveProfilePictureBtn');
@@ -1260,7 +1272,6 @@ function setupSettingsListeners() {
         changePasswordForm.addEventListener('submit', handleChangePassword);
     }
 
-    // Optional: Preview profile picture before upload
     if (profilePictureInput) {
         profilePictureInput.addEventListener('change', (event) => {
             const file = event.target.files[0];
@@ -1423,7 +1434,7 @@ async function loadAllArticlesForAdmin(containerId) {
             .orderBy("createdAt", "desc") // Order all articles by date
             .get();
 
-        container.innerHTML = ''; // Clear loading message
+        container.innerHTML = ''; 
 
         if (snapshot.empty) {
             container.innerHTML = '<p class="text-center text-muted">No articles found.</p>';
@@ -1460,7 +1471,74 @@ async function loadAllArticlesForAdmin(containerId) {
         container.innerHTML = '<p class="text-center text-danger">Error loading all articles.</p>';
     }
 }
+ // function to filter articles
+function filterArticles() {
+    const searchInput = document.getElementById('articleSearchInput');
+    const categorySelect = document.getElementById('articleCategoryFilter');
 
+    const searchTerm = searchInput ? searchInput.value.toLowerCase() : '';
+    const selectedCategory = categorySelect ? categorySelect.value : ''; 
+
+    const tableRows = document.querySelectorAll('.admin-articles-table tbody tr');
+
+    tableRows.forEach(row => {
+        // Skip any loading or "no articles" messages, assuming they are within a single <td> with specific text
+        const isLoaderRow = row.querySelector('td.text-center') && row.querySelector('td.text-center').textContent.includes('Loading');
+        const isNoArticlesRow = row.querySelector('td.text-center') && row.querySelector('td.text-center').textContent.includes('No articles');
+
+        if (isLoaderRow || isNoArticlesRow) {
+            row.style.display = ''; s
+            return; 
+        }
+
+        
+        const titleCell = row.querySelector('td:nth-child(1)'); 
+        const categoryCell = row.querySelector('td:nth-child(2)'); 
+
+        const articleTitle = titleCell ? titleCell.textContent.toLowerCase() : '';
+        const articleCategory = categoryCell ? categoryCell.textContent : '';
+
+        // Determine if the row matches the search term and selected category
+        const matchesSearch = articleTitle.includes(searchTerm);
+        const matchesCategory = (selectedCategory === '' || articleCategory === selectedCategory);
+
+        // Show or hide the row based on the filter results
+        if (matchesSearch && matchesCategory) {
+            row.style.display = ''; // Show the row
+        } else {
+            row.style.display = 'none'; // Hide the row
+        }
+    });
+}
+
+if (window.location.pathname.includes('Admin/Dashboard.html') || window.location.hash === '#manageArticles') {
+   
+    loadArticlesIntoAdminTable();
+
+    
+    const articleSearchInput = document.getElementById('articleSearchInput');
+    if (articleSearchInput) {
+        articleSearchInput.addEventListener('input', filterArticles); 
+    }
+
+    const articleCategoryFilter = document.getElementById('articleCategoryFilter');
+    if (articleCategoryFilter) {
+        articleCategoryFilter.addEventListener('change', filterArticles); 
+    }
+
+    
+    const globalSearchBar = document.getElementById('globalSearchBar');
+    if (globalSearchBar) {
+        globalSearchBar.addEventListener('input', () => {
+            
+            if (articleSearchInput) {
+                articleSearchInput.value = globalSearchBar.value; // Sync the value
+                filterArticles(); 
+            }
+            // Add other logic here if global search affects other parts of the dashboard
+        });
+    }
+}
 // Function to handle article deletion (requires Firebase Authentication/Admin SDK for real deletion)
 // This is a placeholder for now. Real deletion would happen on the server-side with Cloud Functions.
 async function deleteArticle(articleId) {
@@ -1469,9 +1547,9 @@ async function deleteArticle(articleId) {
             if (typeof db === 'undefined' || db === null) {
                 throw new Error("Firestore 'db' object is not defined.");
             }
-            // await db.collection('articles').doc(articleId).delete(); // This line performs the delete
-            console.log(`Simulating deletion of article: ${articleId}`); // Placeholder
-            alert('Article deleted successfully! (Simulated)'); // Placeholder
+            
+            console.log(`Simulating deletion of article: ${articleId}`); 
+            alert('Article deleted successfully! (Simulated)'); 
             // After deletion, reload the list
             loadAllArticlesForAdmin('all-articles-admin');
             loadLatestArticlesForAdmin('latest-articles-admin'); // Also update latest

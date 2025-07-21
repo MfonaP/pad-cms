@@ -10,23 +10,23 @@
 /* ADMIN LOGIN */
 
 .adminbody {
-    background: linear-gradient(to right, #2A448C, #D6DE00); /* Background gradient as seen in other pages */
+    background: linear-gradient(to right, #2A448C, #D6DE00); 
     font-family: 'Poppins', sans-serif;
-    color: #fff; /* White text for main body */
+    color: #fff; 
 }
 .login-header {
-    background-color: var(--primary-blue); /* Dark blue background for header */
+    background-color: var(--primary-blue); 
     padding: 20px;
     text-align: center;
     color: #fff;
-    position: absolute; /* Position at the very top */
+    position: absolute; 
     top: 0;
     left: 0;
     width: 100%;
     z-index: 10;
 }
 .login-header img {
-    height: 60px; /* Adjust logo size */
+    height: 60px; 
     margin-bottom: 10px;
 }
 .login-header h1 {
@@ -34,15 +34,15 @@
     margin-bottom: 0;
 }
 .login-container {
-    margin-top: 150px; /* Push content down to account for header */
-    background-color: #fff; /* White card background */
+    margin-top: 150px; 
+    background-color: #fff; 
     padding: 40px;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    color: #333; /* Dark text for card content */
+    color: #333;
     width: 100%;
-    max-width: 450px; /* Max width for the card */
-    position: relative; /* For z-index if needed */
+    max-width: 450px; 
+    position: relative; 
     z-index: 5;
 }
 .login-container .form-label {
@@ -56,23 +56,23 @@
 }
 .login-container .form-control {
     border: none;
-    border-bottom: 1px solid #ccc; /* Underline style for inputs */
+    border-bottom: 1px solid #ccc; 
     border-radius: 0;
-    padding-left: 0; /* Remove default padding for input if icon is used */
+    padding-left: 0; /
 }
 .login-container .form-control:focus {
     box-shadow: none;
-    border-color: #2A448C; /* Blue underline on focus */
+    border-color: #2A448C; 
 }
 .login-container .btn-primary {
-    background-color: #2A448C; /* Dark blue submit button */
+    background-color: #2A448C; 
     border-color: #2A448C;
     font-size: 1.1rem;
     padding: 10px 0;
     font-weight: bold;
 }
 .login-container .btn-primary:hover {
-    background-color: #2A448C; /* Slightly darker blue on hover */
+    background-color: #2A448C;
     border-color: #2A448C;
 }
 
@@ -88,7 +88,7 @@
 }
 
 #wrapper {
-    display: flex; /* crucial for side by side layout of sidebar and content */
+    display: flex; 
     width: 100%; 
     min-height: 100vh;
 }
@@ -141,9 +141,9 @@
 
 
 .list-group-item.active {
-    background-color: var(--secondary-green) !important; /* Green background for active item */
-    border-left: 5px solid #fff !important; /* White border on the left */
-    padding-left: 15px !important; /* Adjust padding to account for the border width */
+    background-color: var(--secondary-green) !important; 
+    border-left: 5px solid #fff !important; 
+    padding-left: 15px !important; 
     font-weight: bold;
     color: white !important;
 }
@@ -160,29 +160,18 @@
 
 
 .navbar {
-    height: var(--navbar-height); /* Fixed height for the top navbar */
+    height: var(--navbar-height); 
     box-shadow: 0 2px 4px rgba(0,0,0,0.08) !important; 
-    z-index: 1000; /* Ensures it's above content */
+    z-index: 1000; 
     border-bottom: none !important; 
 }
 
-/* Hide sidebar toggle button entirely since we're restricting mobile */
 #sidebarToggle {
     display: none !important;
 }
 
-
-/* Welcome message - adjust visibility and styling */
 .navbar-text {
-    color: #555; /* Slightly muted text color */
-}
-
-/* Custom Search Bar within Navbar */
-.search-bar-custom .input-group {
-    background-color: var(--light-grey-bg); /* Light grey background for search bar */
-    border-radius: 20px; /* Rounded corners */
-    border: 1px solid #ddd; /* Subtle border */
-    overflow: hidden; /* Hide anything outside the border-radius */
+    color: #555; 
 }
 .search-bar-custom .input-group-text {
     background-color: transparent !important; 
@@ -207,41 +196,41 @@
     border: 1px solid var(--primary-blue);
 }
 .navbar .text-primary { 
-    color: var(--primary-blue) !important; /* Your specific blue for user name */
+    color: var(--primary-blue) !important; 
 }
 
 /* Custom dashboard grid adjustments */
 .dashboard-grid-custom {
-    padding: 20px; /* Inner padding for the grid content */
+    padding: 20px; 
 }
 
 .card {
-    border: none !important; /* Remove default Bootstrap card border */
-    border-radius: 8px !important; /* Rounded corners for cards */
-    box-shadow: 0 4px 8px rgba(0,0,0,0.08) !important; /* More prominent shadow for cards */
+    border: none !important; 
+    border-radius: 8px !important; 
+    box-shadow: 0 4px 8px rgba(0,0,0,0.08) !important; 
 }
 
 .card-title {
-    color: var(--primary-blue) !important; /* Blue title color */
+    color: var(--primary-blue) !important; 
     font-weight: 600 !important;
 }
 
 .list-unstyled li {
     padding: 8px 0;
-    border-bottom: 1px solid #eee; /* Light separator line */
+    border-bottom: 1px solid #eee; 
 }
 .list-unstyled li:last-child {
-    border-bottom: none; /* No border on the last item */
+    border-bottom: none; 
 }
 
 /* Doctor's note specific checkmark icon */
 .text-success {
-    color: var(--primary-blue) !important; /* Green color for success icons */
+    color: var(--primary-blue) !important; 
 }
 
 /* Button Styling Overrides for 'View All' */
 .btn-primary {
-    background-color: var(--primary-blue) !important; /* Your specific blue for primary buttons */
+    background-color: var(--primary-blue) !important; 
     border:none;
     transition: background-color 0.2s ease;
 }
@@ -253,10 +242,10 @@
 
 
 .article-list-dashboard img {
-    border-radius: 5px !important; /* Ensure images have slight rounded corners */
+    border-radius: 5px !important; 
 }
 
-/* General section titles (like 'Doctor's Note Management') */
+/* General section titles */
 .section-title {
     color: var(--primary-blue);
     font-size: 1.8em;
@@ -266,24 +255,24 @@
 
 /* Adjustments for Bootstrap tables (for Doctor's Note and All Articles views) */
 .table {
-    --bs-table-bg: #fff; /* Ensure table background is white */
-    --bs-table-striped-bg: #f8f9fa; /* Light stripe color */
-    --bs-table-hover-bg: #f5f5f5; /* Light hover color */
-    box-shadow: 0 2px 5px rgba(0,0,0,0.08); /* Subtle shadow for tables */
-    border-radius: 8px; /* Rounded corners for the table itself */
-    overflow: hidden; /* Ensures border-radius applies to corners */
-    margin-top: 20px; /* Space above table */
+    --bs-table-bg: #fff; 
+    --bs-table-striped-bg: #f8f9fa; 
+    --bs-table-hover-bg: #f5f5f5;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.08); 
+    border-radius: 8px; 
+    overflow: hidden; 
+    margin-top: 20px; 
 }
 .table thead {
     background-color: var(--primary-blue);
     color: white;
 }
 .table thead th {
-    border-bottom: none; /* Remove border below header */
+    border-bottom: none; 
     padding: 1rem;
 }
 .table tbody td {
-    vertical-align: middle; /* Vertically align cell content */
+    vertical-align: middle; 
     padding: 1rem;
 }
 .table .table-thumbnail {
@@ -293,7 +282,7 @@
     border-radius: 5px;
 }
 .table .form-check-input.form-switch {
-    font-size: 1.25em; /* Larger toggle switch */
+    font-size: 1.25em; 
     margin-right: .5rem;
 }
 
@@ -305,9 +294,9 @@
 /* Search and filter controls for All Articles */
 .article-actions {
     display: flex;
-    justify-content: space-between; /* Pushes button and search/filter apart */
+    justify-content: space-between; 
     align-items: center;
-    flex-wrap: wrap; /* Allow wrapping on smaller screens (tablet) */
+    flex-wrap: wrap; 
     margin-bottom: 1.5rem;
 }
 .search-filter-controls {
@@ -316,12 +305,12 @@
 }
 .search-filter-controls .form-control,
 .search-filter-controls .form-select {
-    max-width: 250px; /* Limit width of search/filter inputs */
+    max-width: 250px; 
 }
-/* For tablet, if space gets tight, allow flex-wrap but maintain horizontal search/filter */
-@media (max-width: 991.98px) and (min-width: 768px) { /* Tablet size */
+
+@media (max-width: 991.98px) and (min-width: 768px) {
     .article-actions {
-        flex-direction: row; /* Keep elements side by side */
+        flex-direction: row; 
         justify-content: space-between;
     }
     .search-filter-controls {

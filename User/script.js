@@ -1,9 +1,4 @@
-// script.js
 
-// Global variable for Firestore (assumed to be initialized in HTML)
- //const db = firebase.firestore(); // This line should be in your HTML after firebase.initializeApp()
-
-// --- Translation Data ---
 const translations = {
     en: {
         articlesPageTitle: "Articles - CMS PAD",
@@ -117,7 +112,7 @@ async function loadArticles(containerId, collectionName, category = null, limitC
 
         const snapshot = await query.get();
 
-        container.innerHTML = ''; // Clear loading message
+        container.innerHTML = ''; 
 
         if (snapshot.empty) {
             container.innerHTML = '<p class="text-center text-muted col-12" data-lang-key="noArticlesFound">No articles found in this category.</p>';
@@ -131,7 +126,7 @@ async function loadArticles(containerId, collectionName, category = null, limitC
             container.insertAdjacentHTML('beforeend', articleHtml);
         });
 
-        setLanguage(localStorage.getItem('selectedLanguage') || 'en'); // Re-apply language to newly added dynamic content
+        setLanguage(localStorage.getItem('selectedLanguage') || 'en'); 
 
     } catch (error) {
         console.error("Error loading articles:", error);
@@ -139,7 +134,6 @@ async function loadArticles(containerId, collectionName, category = null, limitC
     }
 }
 
-// --- Optional: Load Doctor Notes Function ---
 async function loadDoctorNotes(containerId) {
     const containerElement = document.getElementById(containerId);
     if (!containerElement) {
@@ -210,7 +204,7 @@ async function loadArticleDetailsAndRelated() {
         return;
     }
 
-    // Check for Firestore instance
+    
     if (typeof db === 'undefined' || db === null) {
         console.error("Failed to connect to database: Firestore instance is undefined or null.");
         if (articleTitleEl) articleTitleEl.textContent = 'Error: Database Connection Failed';
@@ -228,7 +222,7 @@ async function loadArticleDetailsAndRelated() {
             
             if (articleTitleEl) articleTitleEl.textContent = article.title || 'Untitled Article';
             if (articleCategoryEl) articleCategoryEl.textContent = article.category || 'Uncategorized';
-            // Convert Firestore Timestamp to readable date string
+            
             if (articleDateEl && article.createdAt && typeof article.createdAt.toDate === 'function') {
                 articleDateEl.textContent = new Date(article.createdAt.toDate()).toLocaleDateString();
             } else if (articleDateEl) {
@@ -312,48 +306,10 @@ async function loadRelatedArticles(currentCategory, currentArticleId) {
         relatedArticlesContainer.innerHTML = '<p class="col-12 text-center text-danger">Could not load related articles.</p>';
     }
 }
-// --- Optional: Load Single Doctor Note Detail Function ---
-/*async function loadDoctorNoteDetail() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const noteId = urlParams.get('id');
-    const noteDetailContainer = document.getElementById('doctor-note-detail-container');
-
-    if (!noteId || !noteDetailContainer) {
-        if (noteDetailContainer) {
-            noteDetailContainer.innerHTML = '<p class="text-center text-danger col-12">Doctor note not found or ID missing.</p>';
-        }
-        return;
-    }
-    if (typeof db === 'undefined' || db === null) {
-        noteDetailContainer.innerHTML = '<p class="text-center text-danger col-12">Failed to connect to database. Please check console.</p>';
-        return;
-    }
-
-    try {
-        const doc = await db.collection("doctorNotes").doc(noteId).get();
-        if (doc.exists && doc.data().status === true) {
-            const note = doc.data();
-            const detailHtml = `
-                <div class="col-12">
-                    <h1 class="mb-4">${note.title}</h1>
-                    <p class="text-muted small">Date: ${note.createdAt? new Date(note.createdAt.toDate()).toLocaleDateString() : 'N/A'}</p>
-                    <div class="lead">${note.content ? note.content.replace(/\n/g, '<br>') : ''}</div>
-                </div>
-            `;
-            noteDetailContainer.innerHTML = detailHtml;
-        } else {
-            noteDetailContainer.innerHTML = '<p class="text-center text-danger col-12">Doctor note not found or not published.</p>';
-        }
-    } catch (error) {
-        console.error("Error loading doctor note detail:", error);
-        noteDetailContainer.innerHTML = '<p class="text-center text-danger col-12">Failed to load doctor note details.</p>';
-    }
-}*/
 
 
 // --- Main DOMContentLoaded Listener ---
 document.addEventListener('DOMContentLoaded', function() {
-    // LANGUAGE DROPDOWN setup (Moved to top as it's common)
     const languageDropdownToggle = document.getElementById('languageDropdown');
     const currentLanguageText = document.getElementById('currentLanguageText');
     const languageSelects = document.querySelectorAll('.language-select');
@@ -363,7 +319,7 @@ document.addEventListener('DOMContentLoaded', function() {
             item.addEventListener('click', function(e) {
                 e.preventDefault();
                 const selectedLang = this.getAttribute('data-lang');
-                setLanguage(selectedLang); // Use the setLanguage function
+                setLanguage(selectedLang); 
             });
         });
     }
@@ -371,23 +327,14 @@ document.addEventListener('DOMContentLoaded', function() {
     // Apply saved language or default to English
     const savedLanguage = localStorage.getItem('selectedLanguage') || 'en';
     setLanguage(savedLanguage);
-
-    // --- Firebase Initialization Check (Your original block, slightly adjusted) ---
-    // This assumes Firebase has already been initialized in the HTML <script> block
     if (typeof firebase === 'undefined' || firebase.apps.length === 0) {
         console.error("Firebase not initialized in HTML. Cannot fetch public content.");
-        // You might want to display a user-friendly message on the page if Firebase isn't ready
-        return; // Exit if Firebase isn't set up
+        return;
     }
-    // console.log("Firestore initialized for public side."); // Keep if you like, but it's redundant if db check is there
-
-
-    // In your script.js (inside or outside the DOMContentLoaded listener, but callable)
 
 async function loadArticleDetail() {
     const urlParams = new URLSearchParams(window.location.search);
-    const articleId = urlParams.get('id'); // Get the 'id' parameter from the URL
-
+    const articleId = urlParams.get('id');
     const titleElement = document.getElementById('article-detail-title');
     const categoryElement = document.getElementById('article-detail-category');
     const dateElement = document.getElementById('article-detail-date');
@@ -547,19 +494,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (typeof db === 'undefined' || db === null) {
                     throw new Error("Firestore 'db' object is not defined.");
                 }
-                console.log("db object is defined. Proceeding with Firestore add."); // New log
+                console.log("db object is defined. Proceeding with Firestore add."); 
 
                 await db.collection('contactSubmissions').add({
                     name: name,
                     email: email,
                     message: message,
-                    timestamp: firebase.firestore.FieldValue.serverTimestamp(), // Firestore timestamp
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp(), 
                     read: false // Mark as unread by default
                 });
 
                 formMessage.innerHTML = '<div class="alert alert-success" role="alert">Your message has been sent successfully!</div>';
                 contactForm.reset(); 
-                console.log("Message sent successfully."); // New log
+                console.log("Message sent successfully."); 
             } catch (error) {
                 console.error("Error sending message:", error);
                 formMessage.innerHTML = `<div class="alert alert-danger" role="alert">Error sending message: ${error.message}</div>`;
@@ -727,13 +674,13 @@ document.addEventListener('DOMContentLoaded', () => {
     if (sendButton && chatInput) {
         sendButton.addEventListener('click', function() {
             sendMessage(chatInput.value);
-            // chatInput.value is cleared inside sendMessage now
+            
         });
         chatInput.addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
                 e.preventDefault();
                 sendMessage(chatInput.value);
-                // chatInput.value is cleared inside sendMessage now
+                
             }
         });
     }
@@ -750,25 +697,23 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Modal Show/Hide Logic (Your existing logic) ---
     if (chatbotModal) {
         chatbotModal.addEventListener('hidden.bs.modal', function() {
-            chatMessagesContainer.innerHTML = ''; // Clear chat history
-            // Re-add initial greeting and suggestions when modal is hidden and then re-opened
+            chatMessagesContainer.innerHTML = '';
+            
             appendMessage(chatbotResponses['greeting'].text, 'bot', chatbotResponses['greeting'].suggestions);
             chatInput.value = ''; // Clear input on close
         });
         chatbotModal.addEventListener('shown.bs.modal', function() {
-            // If the chat container is empty when modal shown, add greeting
-            // This prevents duplicate greetings if modal is shown, hidden, then shown again without closing the browser
             if (chatMessagesContainer.children.length === 0 ||
                 (chatMessagesContainer.children.length === 1 && chatMessagesContainer.firstElementChild.classList.contains('chat-message') && chatMessagesContainer.firstElementChild.textContent === 'Hello! How can I help you today?')) {
                 appendMessage(chatbotResponses['greeting'].text, 'bot', chatbotResponses['greeting'].suggestions);
             }
-            chatInput.focus(); // Focus on input for immediate typing
+            chatInput.focus(); 
         });
     }
     
 }); // END of DOMContentLoaded
 
-// SCROLL CATEGORY FUNCTION (window.scrollCategory - kept as global)
+// SCROLL CATEGORY FUNCTION 
 window.scrollCategory = function(id, scrollAmount) {
     const element = document.getElementById(id);
     if (element) {
